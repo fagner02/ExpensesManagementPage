@@ -1,0 +1,6 @@
+name: actions
+
+on: push
+
+env:
+  REACT_APP_API:https://expensesmanagement.azurewebsites.net/
