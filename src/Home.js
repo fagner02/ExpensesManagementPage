@@ -1,33 +1,55 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      size: 0,
+      size: 1,
       posx: -25,
       opacity: 0,
+      persons: 0,
+      transactions: 0,
+      height: 0,
+      showHeight: 0,
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    var table = document.querySelector(".main");
+    var showTable = document.querySelector(".main-container>:nth-child(6)");
+    table.style.height = table.clientHeight + "px";
+    showTable.style.height = showTable.clientHeight + "px";
+    this.setState({
+      height: table.clientHeight,
+      showHeight: showTable.clientHeight,
+    });
+  }
 
   async setAnimation() {
-    this.setState({ size: 1 });
-    await new Promise(() =>
+    var table = document.querySelector(".main");
+    table.style.overflow = "hidden";
+    table.style.height = "0px";
+
+    setTimeout(() => {
+      var showTable = document.querySelector(
+        ".main-container>:nth-child(6)>div"
+      );
+      console.log(showTable);
+      showTable.style.top = "0px";
       setTimeout(() => {
         this.setState({ posx: 0, opacity: 1 });
-      }, 300)
-    );
+      }, 400);
+    }, 400);
   }
 
   render() {
     return (
-      <div>
-        <div>
-          <h1>Home</h1>
-          <h3>This is the test page</h3>
-          <p>Here you can edit and access the test database</p>
+      <div className="main-container">
+        <h1>Home</h1>
+        <h3>This is the test page</h3>
+        <p>Here you can edit and access the test database</p>
+        <div style={{ display: "flex" }}>
           <button
             className="space-v"
             onClick={() => {
@@ -36,16 +58,13 @@ class Home extends Component {
             <b>try it</b>
           </button>
         </div>
-        <div className="main" style={{ display: "flex", isolation: "isolate" }}>
-          <div
-            style={{
-              background: "white",
-              height: "10vw",
-              left: "0",
-              width: "10vw",
-              zIndex: "0",
-              position: "absolute",
-            }}></div>
+        <div
+          className="main"
+          style={{
+            display: "flex",
+            isolation: "isolate",
+            transition: "height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+          }}>
           <div
             className="table-container"
             style={{
@@ -58,30 +77,81 @@ class Home extends Component {
               <p className="cell title-label full-w">database</p>
             </div>
             <div>
-              <div className="cell full-w">tables</div>
+              <div className="cell full-w">create</div>
             </div>
             <div>
               <div
                 className="cell full-w"
                 style={{ display: "flex", justifyContent: "end" }}>
-                <div style={{ margin: "0 10px" }}>cells</div>
-                <div>info</div>
+                <div style={{ margin: "0 10px" }}>update</div>
+                <div>delete</div>
               </div>
             </div>
             <div>
-              <div className="cell full-w">data</div>
+              <div className="cell full-w">retrieve</div>
             </div>
           </div>
-          <h3
+        </div>
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            overflow: "hidden",
+            height: "100%",
+          }}>
+          <div
             style={{
-              transition: "all 0.5s ease",
-              opacity: this.state.opacity,
-              zIndex: -1,
-              transform: `translateX(${this.state.posx}vw)`,
+              display: "flex",
+              position: "relative",
+              top: "-170px",
+              height: "170px",
+              transition: "top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             }}>
-            explore the menus <br />
-            and see what you can do
-          </h3>
+            <div
+              style={{
+                width: "200px",
+                border: "solid 1px black",
+                borderRadius: "10px",
+                padding: "10px",
+                backgroundColor: "white",
+              }}>
+              <div>Persons: </div>
+              <div>Transactions: </div>
+              <div
+                style={{
+                  border: "solid 1px black",
+                  borderRadius: "10px",
+                  marginTop: "10px",
+                }}>
+                <div className="cell">Total Balance </div>
+                <div className="cell">Revenue </div>
+                <div className="cell">Expense </div>
+              </div>
+            </div>
+            <div className="link-buttons">
+              <button>
+                <Link className="tab-link" to="/People">
+                  People &gt;
+                </Link>
+              </button>
+              <button>
+                <Link className="tab-link" to="/Transactions">
+                  Transactions &gt;
+                </Link>
+              </button>
+              <h3
+                style={{
+                  transition: "all 0.5s ease",
+                  opacity: this.state.opacity,
+                  zIndex: -1,
+                  transform: `translateX(${this.state.posx}vw)`,
+                  margin: "0px",
+                }}>
+                explore the pages <br />
+                and see what you can do
+              </h3>
+            </div>
+          </div>
         </div>
       </div>
     );

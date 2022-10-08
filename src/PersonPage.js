@@ -1,28 +1,32 @@
 import React, { Component } from "react";
-import CategoryFetch from "./CategoryFetch";
+import PersonFetch from "./PersonFetch";
 import TrashIcon from "./TrashIcon";
 import EditIcon from "./EditIcon";
+import RefreshIcon from "./RefreshIcon";
+import CheckIcon from "./CheckIcon";
 
-export class CategoryPage extends Component {
+export class PersonPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: [{ id: " - ", name: " - " }],
+      people: [{ id: " - ", name: "   -   " }],
       children: [],
+      selected: [],
     };
     this.willUnmount = false;
   }
 
   refresh() {
-    CategoryFetch.getAll().then((res) => {
+    PersonFetch.getAll().then((res) => {
       if (!this.willUnmount) {
-        this.setState({ categories: res });
+        this.setState({ people: res });
       }
     });
   }
 
   componentDidMount() {
     this.willUnmount = false;
+    this.getHeight();
     this.refresh();
   }
 
@@ -32,12 +36,61 @@ export class CategoryPage extends Component {
     this.willUnmount = true;
   }
 
-  openAddCategory() {
+  checkBox(id) {
+    const box = document.querySelector(`.checkbox#check${id}`);
+    const icon = document.querySelector(`.checkbox>#check${id}`);
+    const path = document.querySelector(`.checkbox>#check${id}>path`);
+    const button = document.querySelectorAll(`#delete-selected,#uncheck`);
+
+    icon.style.transformOrigin = "center";
+    box.style.transition = "background-color 0.3s ease-in-out";
+    icon.style.transition = "all 0.3s ease-in-out";
+    path.style.transition = "all 0.3s ease-in-out";
+
+    if (
+      box.style.backgroundColor === "white" ||
+      box.style.backgroundColor === ""
+    ) {
+      box.style.backgroundColor = "black";
+      path.setAttribute("stroke", "white");
+      icon.style.rotate = "0deg";
+      if (this.state.selected.length === 0) {
+        button.forEach((x) => {
+          x.style.scale = "1";
+          x.style.opacity = "1";
+        });
+      }
+      this.state.selected.push(id);
+
+      return;
+    }
+    box.style.backgroundColor = "white";
+    path.setAttribute("stroke", "black");
+    icon.style.rotate = "45deg";
+    this.state.selected.splice(this.state.selected.indexOf(id), 1);
+    if (this.state.selected.length === 0) {
+      button.forEach((x) => {
+        x.style.scale = "0";
+        x.style.opacity = "0";
+      });
+    }
+  }
+
+  uncheckAll() {
+    while (this.state.selected.length > 0) {
+      this.checkBox(this.state.selected[0]);
+    }
+  }
+
+  openAddPerson() {
     const detailMenu = document.querySelector(".container :nth-child(1)");
+    const container = document.querySelector(".container");
+
     if (detailMenu.style.height === "0px") {
       return;
     }
     detailMenu.style.height = `${detailMenu.scrollHeight}px`;
+    container.style.height = "0px";
     setTimeout(() => {
       detailMenu.style.height = "0px";
     }, 10);
@@ -53,7 +106,7 @@ export class CategoryPage extends Component {
     }, 400);
   }
 
-  closeAddCategory() {
+  closeAddPerson() {
     const addMenu = document.getElementsByClassName("container")[1];
     if (addMenu.style.height === "0px") {
       return;
@@ -70,6 +123,7 @@ export class CategoryPage extends Component {
       this.refresh();
       setTimeout(() => {
         detailMenu.style.height = "auto";
+        this.getHeight();
       }, 400);
     }, 400);
   }
@@ -108,12 +162,17 @@ export class CategoryPage extends Component {
     const info = document.getElementById(id);
     const edit = document.querySelector(`#edit${id}`);
     const controls = document.querySelector(`#a${id}`);
+    const check = document.querySelector(`.checkbox#check${id}`);
     if (info.style.height === "0px" && edit.style.height === "0px") {
+      check.style.opacity = "0";
+      check.style.scale = "0";
+      check.style.width = "0px";
       info.style.height = `${info.scrollHeight}px`;
       info.style.padding = "10px";
       info.style.opacity = "1";
       controls.style.transform = "scale(1)";
       controls.style.opacity = "1";
+      controls.style.width = "fit-content";
       return;
     }
     info.style.height = "0px";
@@ -122,6 +181,10 @@ export class CategoryPage extends Component {
     edit.style.padding = "0px";
     controls.style.transform = "scale(0)";
     controls.style.opacity = "0";
+    controls.style.width = "0px";
+    check.style.opacity = "1";
+    check.style.scale = "1";
+    check.style.width = "fit-content";
   }
 
   openDeleteView(id) {
@@ -129,7 +192,7 @@ export class CategoryPage extends Component {
     const controls = document.querySelector(`#delete-options${id}`);
     this.toggleDetails(id);
     controls.style.transform = "scale(1)";
-    controls.style.padding = "10px 0px";
+    controls.style.padding = "10px";
     controls.style.opacity = "1";
     elem.style.opacity = "0";
     elem.style.height = "0px";
@@ -150,39 +213,85 @@ export class CategoryPage extends Component {
     controls.style.padding = "0px";
     elem.style.opacity = "1";
     elem.style.height = `${elem.scrollHeight}px`;
+
     setTimeout(() => {
       elem.style.height = "auto";
     }, 500);
   }
 
+  getHeight() {
+    var h1 = document.querySelector("h1");
+    var h2 = document.querySelector("h3");
+    var h3 = document.querySelector(".actions");
+    var h4 = document.querySelector(".nav");
+    var sum =
+      h1.clientHeight +
+      parseFloat(window.getComputedStyle(h1).marginTop) * 2 +
+      h2.clientHeight +
+      parseFloat(window.getComputedStyle(h2).marginTop) * 2 +
+      h3.clientHeight +
+      parseFloat(window.getComputedStyle(h2).marginTop) * 2 +
+      h4.clientHeight;
+
+    document.querySelector(".container").style.height = `calc(100% - ${sum}px)`;
+  }
+
   render() {
     return (
-      <div>
+      <div className="main-container">
         <h1>Hello</h1>
         <h3>This is the home page</h3>
         <div className="actions">
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <button
+              onClick={(e) => {
+                this.refresh();
+              }}
+              style={{ display: "flex" }}>
+              <RefreshIcon size="20px" color="white"></RefreshIcon>
+            </button>
+            <button
+              id="add-person"
+              style={{ margin: "0 10px" }}
+              onClick={() => this.openAddPerson()}>
+              Add Person
+            </button>
+            <button
+              id="delete-selected"
+              onClick={() => {
+                PersonFetch.delete({ idsToDelete: this.state.selected }).then(
+                  () => this.refresh()
+                );
+              }}>
+              Delete
+            </button>
+          </div>
           <button
-            onClick={(e) => {
-              this.refresh();
+            id="uncheck"
+            style={{
+              backgroundColor: "white",
+              border: "solid 1px black",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "36px",
+            }}
+            onClick={() => {
+              this.uncheckAll();
             }}>
-            Update
-          </button>
-          <button
-            id="add-category"
-            style={{ margin: "0 10px" }}
-            onClick={() => this.openAddCategory()}>
-            Add Category
+            <CheckIcon size="20px" stroke="black"></CheckIcon>
           </button>
         </div>
-        <div className="container">
+        <div
+          className="container"
+          style={{ height: "100%", transition: "height 0.3s ease-out" }}>
           <div
             style={{
-              overflow: "hidden",
               transition: "all 0.4s ease",
               opacity: "1",
             }}>
             {/* ITEM ROW ---------------------------------- */}
-            {this.state.categories.map((item) => (
+            {this.state.people.map((item) => (
               <div
                 className="row"
                 id={"row" + item.id}
@@ -200,7 +309,6 @@ export class CategoryPage extends Component {
                     display: "flex",
                     cursor: "pointer",
                     transition: "all 0.4s ease",
-                    overflow: "hidden",
                     gridColumn: "1 / 1",
                     gridRow: "1 / 1",
                   }}
@@ -223,19 +331,37 @@ export class CategoryPage extends Component {
                     </p>
                     <div className="row-right">
                       <div className="property">
-                        <h6>Type:</h6>
-                        <p> {item.type}</p>
+                        <h6>Name:</h6>
+                        <p> {item.name}</p>
                       </div>
                       <div className="property">
-                        <h6>Value:</h6>
-                        <p> {item.value}</p>
+                        <h6>Age:</h6>
+                        <p> {item.age}</p>
                       </div>
                       <div className="property">
-                        <h6>PersonId:</h6>
-                        <p> {item.personId}</p>
+                        <h6>Phone:</h6>
+                        <p> {item.phone ?? "-"}</p>
+                      </div>
+                      <div className="property">
+                        <h6>Email:</h6>
+                        <p> {item.email ?? "-"}</p>
                       </div>
                     </div>
                   </div>
+
+                  {/*ITEM ROW CHECKBOX --------------------------------*/}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      this.checkBox(item.id);
+                    }}
+                    className="checkbox"
+                    id={"check" + item.id}>
+                    <CheckIcon
+                      size="20px"
+                      stroke="black"
+                      id={"check" + item.id}></CheckIcon>
+                  </button>
 
                   {/*ITEM ROW CONTROLS --------------------------------------*/}
                   <div className="item-controls" id={"a" + item.id}>
@@ -265,14 +391,17 @@ export class CategoryPage extends Component {
                       overflow: "hidden",
                       transition: "all 0.4s ease",
                     }}>
-                    <div
-                      style={{
-                        padding: "5px 10px",
-                        border: "1px solid black",
-                        borderRadius: "5px",
-                      }}>
+                    <div className="detail-row">
                       {/* DETAIL ROWS --------------------------------- */}
-                      <p>Description: {item.description}</p>
+                      <p>Revenue: {item.totalRevenue}</p>
+                    </div>
+                    <div className="detail-row">
+                      {/* DETAIL ROWS --------------------------------- */}
+                      <p>Expenses: {item.totalExpenses}</p>
+                    </div>
+                    <div className="detail-row">
+                      {/* DETAIL ROWS --------------------------------- */}
+                      <p>Balance: {item.totalBalance}</p>
                     </div>
                   </div>
 
@@ -294,8 +423,37 @@ export class CategoryPage extends Component {
                       {/*EDIT INPUT ROWS ----------------------------------------------------*/}
                       <div style={{ display: "flex", gap: "10px" }}>
                         <p className="cell title-label input-label">Name</p>
-                        <input type="text" style={{ width: "100%" }} />
+                        <input
+                          type="text"
+                          id={"e-name" + item.id}
+                          style={{ width: "100%" }}
+                        />
                       </div>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <p className="cell title-label input-label">Age</p>
+                        <input
+                          type="number"
+                          id={"e-age" + item.id}
+                          style={{ width: "100%" }}
+                        />
+                      </div>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <p className="cell title-label input-label">Phone</p>
+                        <input
+                          type="number"
+                          id={"e-phone" + item.id}
+                          style={{ width: "100%" }}
+                        />
+                      </div>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <p className="cell title-label input-label">Email</p>
+                        <input
+                          type="text"
+                          id={"e-email" + item.id}
+                          style={{ width: "100%" }}
+                        />
+                      </div>
+
                       {/*EDIT CONTROLS -----------------------------------------------------*/}
                       <div
                         style={{
@@ -310,7 +468,33 @@ export class CategoryPage extends Component {
                           }}>
                           Cancel
                         </button>
-                        <button>Done</button>
+                        <button
+                          onClick={(e) => {
+                            var age = document.querySelector(
+                              "#e-age" + item.id
+                            ).value;
+                            var name = document.querySelector(
+                              "#e-name" + item.id
+                            ).value;
+                            var email = document.querySelector(
+                              "#e-email" + item.id
+                            ).value;
+                            var phone = document.querySelector(
+                              "#e-phone" + item.id
+                            ).value;
+                            PersonFetch.put({
+                              id: item.id,
+                              age: age === "" ? null : parseInt(age),
+                              name: name === "" ? null : name,
+                              email: email === "" ? null : email,
+                              phone: phone === "" ? null : phone,
+                            }).then((data) => {
+                              this.closeEdit(item.id);
+                              this.refresh();
+                            });
+                          }}>
+                          Done
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -332,9 +516,11 @@ export class CategoryPage extends Component {
                         marginRight: "10px",
                       }}
                       onClick={() => {
-                        CategoryFetch.delete(item.id).then((res) => {
-                          this.refresh();
-                        });
+                        PersonFetch.delete({ idsToDelete: [item.id] }).then(
+                          (res) => {
+                            this.refresh();
+                          }
+                        );
                       }}>
                       Yes
                     </button>
@@ -367,20 +553,20 @@ export class CategoryPage extends Component {
           }}>
           {/*INPUT ROW -----------------------------------------------*/}
           <div style={{ display: "flex", gap: "10px" }}>
-            <p className="cell title-label input-label">Type</p>
-            <input type="text" name="type" />
+            <p className="cell title-label input-label">Age</p>
+            <input type="number" name="age" />
           </div>
           <div style={{ display: "flex", gap: "10px" }}>
-            <p className="cell title-label input-label">Value</p>
-            <input type="text" name="value" />
+            <p className="cell title-label input-label">Name</p>
+            <input type="text" name="name" />
           </div>
           <div style={{ display: "flex", gap: "10px" }}>
-            <p className="cell title-label input-label">Description</p>
-            <input type="text" name="description" />
+            <p className="cell title-label input-label">Phone</p>
+            <input type="number" name="phone" />
           </div>
           <div style={{ display: "flex", gap: "10px" }}>
-            <p className="cell title-label input-label">PersonId</p>
-            <input type="text" name="person-id" />
+            <p className="cell title-label input-label">Email</p>
+            <input type="text" name="email" />
           </div>
           <div
             style={{
@@ -390,26 +576,29 @@ export class CategoryPage extends Component {
             }}>
             <button
               onClick={() => {
-                this.closeAddCategory();
+                this.closeAddPerson();
               }}>
               Cancel
             </button>
             <button
               onClick={() => {
-                CategoryFetch.post({
-                  type: parseInt(
-                    document.querySelector("input[name=type]").value
+                var age = document.querySelector("input[name=age]").value;
+                var name = document.querySelector("input[name=name]").value;
+                var email = document.querySelector("input[name=email]").value;
+                var phone = document.querySelector("input[name=phone]").value;
+                if (age === "" || name === "") {
+                  window.alert("Age and Name are required");
+                  return;
+                }
+                PersonFetch.post({
+                  age: parseFloat(
+                    document.querySelector("input[name=age]").value
                   ),
-                  value: parseFloat(
-                    document.querySelector("input[name=value]").value
-                  ),
-                  description: document.querySelector("input[name=description]")
-                    .value,
-                  personId: parseInt(
-                    document.querySelector("input[name=person-id]").value
-                  ),
-                });
-                this.closeAddCategory();
+                  name: document.querySelector("input[name=name]").value,
+                  email: email === "" ? null : email,
+                  phone: phone === "" ? null : phone,
+                }).then(() => this.refresh());
+                this.closeAddPerson();
               }}>
               Add
             </button>
@@ -420,4 +609,4 @@ export class CategoryPage extends Component {
   }
 }
 
-export default CategoryPage;
+export default PersonPage;

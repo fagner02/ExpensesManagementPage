@@ -1,11 +1,10 @@
-const CategoryFetch = {
+const TransactionFetch = {
   getAll: async () => {
     return await fetch(process.env.REACT_APP_API + "Transaction")
       .then(async (response) => {
         let temp = [];
         temp = await response.json();
         if (temp.length === 0) {
-          console.log("No categories found");
           return [
             {
               id: "  -  ",
@@ -50,13 +49,14 @@ const CategoryFetch = {
       },
     });
   },
-  delete: async (id) => {
-    await fetch(process.env.REACT_APP_API + "Person/" + id, {
+  delete: async (ids) => {
+    await fetch(process.env.REACT_APP_API + "Person", {
       method: "DELETE",
+      body: JSON.stringify({ idsToDelete: ids }),
       headers: {
         "Content-Type": "application/json",
       },
     });
   },
 };
-export default CategoryFetch;
+export default TransactionFetch;

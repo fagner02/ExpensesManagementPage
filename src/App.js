@@ -1,30 +1,28 @@
 import "./App.css";
-import CategoryPage from "./CategoryPage";
-import ProductPage from "./ProductPage";
+import TransactionPage from "./TransactionPage";
+import PersonPage from "./PersonPage";
 import Home from "./Home";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   return (
     <Router>
-      <nav>
+      <div className="nav">
         <Link className="tab-link" to="/">
           Home
         </Link>
-        <Link className="tab-link" to="/Products">
-          Products
+        <Link className="tab-link" to="/People">
+          People
         </Link>
-        <Link className="tab-link" to="/Categories">
-          Categories
+        <Link className="tab-link" to="/Transactions">
+          Transactions
         </Link>
-      </nav>
-      <div className="main-container">
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/Categories" element={<CategoryPage />}></Route>
-          <Route path="/Products" element={<ProductPage />}></Route>
-        </Routes>
       </div>
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/Transactions" element={<TransactionPage />}></Route>
+        <Route path="/People" element={<PersonPage />}></Route>
+      </Routes>
     </Router>
   );
 }
