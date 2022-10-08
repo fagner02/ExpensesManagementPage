@@ -23,7 +23,6 @@ export class TransactionPage extends Component {
 
   componentDidMount() {
     this.willUnmount = false;
-    this.getHeight();
     this.refresh();
   }
 
@@ -35,22 +34,22 @@ export class TransactionPage extends Component {
 
   openAddTransaction() {
     const detailMenu = document.querySelector(".container :nth-child(1)");
+    const addMenu = document.querySelectorAll(".container")[1];
     const container = document.querySelector(".container");
-    if (detailMenu.style.height === "0px") {
+
+    if (container.style.flexGrow === "0") {
       return;
     }
+
     container.style.height = "0px";
-    detailMenu.style.height = `${detailMenu.scrollHeight}px`;
-    setTimeout(() => {
-      detailMenu.style.height = "0px";
-    }, 10);
+    container.style.flexGrow = "0";
 
     setTimeout(() => {
       detailMenu.style.opacity = "0";
     }, 300);
+
     setTimeout(() => {
-      const addMenu = document.getElementsByClassName("container")[1];
-      addMenu.style.height = `${addMenu.scrollHeight}px`;
+      addMenu.style.height = "100%";
       addMenu.style.padding = "0px";
       addMenu.style.opacity = "1";
     }, 400);
@@ -58,6 +57,8 @@ export class TransactionPage extends Component {
 
   closeAddTransaction() {
     const addMenu = document.getElementsByClassName("container")[1];
+    const container = document.querySelector(".container");
+    const detailMenu = document.querySelector(".container :nth-child(1)");
     if (addMenu.style.height === "0px") {
       return;
     }
@@ -67,14 +68,10 @@ export class TransactionPage extends Component {
       addMenu.style.opacity = "0";
     }, 300);
     setTimeout(() => {
-      const detailMenu = document.querySelector(".container :nth-child(1)");
-      detailMenu.style.height = `${detailMenu.scrollHeight}px`;
       detailMenu.style.opacity = "1";
+      container.style.flexGrow = "1";
+      container.style.height = "100%";
       this.refresh();
-      setTimeout(() => {
-        detailMenu.style.height = "auto";
-        this.getHeight();
-      }, 400);
     }, 400);
   }
 
@@ -90,48 +87,30 @@ export class TransactionPage extends Component {
     info.style.padding = "0px 10px";
   }
 
-  getHeight() {
-    var h1 = document.querySelector("h1");
-    var h2 = document.querySelector("h3");
-    var h3 = document.querySelector(".actions");
-    var h4 = document.querySelector(".nav");
-    var sum =
-      h1.clientHeight +
-      parseFloat(window.getComputedStyle(h1).marginTop) * 2 +
-      h2.clientHeight +
-      parseFloat(window.getComputedStyle(h2).marginTop) * 2 +
-      h3.clientHeight +
-      parseFloat(window.getComputedStyle(h2).marginTop) * 2 +
-      h4.clientHeight;
-
-    document.querySelector(".container").style.height = `calc(100% - ${sum}px)`;
-  }
-
   render() {
     return (
       <div className="main-container">
         <h1>Hello</h1>
         <h3>This is the home page</h3>
-        <div className="actions" style={{ height: "36px" }}>
-          <div style={{ display: "flex" }}>
+        <div className="actions">
+          <div
+            style={{ display: "flex", marginTop: "2px", alignItems: "center" }}>
             <button
-              style={{ display: "flex", alignItems: "center" }}
+              style={{ display: "flex", height: "33px" }}
               onClick={(e) => {
                 this.refresh();
               }}>
               <RefreshIcon size="20px" color="white"></RefreshIcon>
             </button>
             <button
-              id="add-Transaction"
+              id="add-transaction"
               style={{ margin: "0 10px" }}
               onClick={() => this.openAddTransaction()}>
               Add Transaction
             </button>
           </div>
         </div>
-        <div
-          className="container"
-          style={{ transition: "height 0.3s ease-out" }}>
+        <div className="container" style={{ transition: "all 0.3s ease-out" }}>
           <div
             style={{
               transition: "all 0.4s ease",
@@ -162,11 +141,6 @@ export class TransactionPage extends Component {
                   }}
                   /*TOGGLE DETAIL VIEW -------------------------------------*/
                   onClick={(e) => {
-                    this.setState((prevState) => {
-                      // let children = Object.assign({}, prevState.children);
-                      // children[item.id] = data;
-                      // return { children };
-                    });
                     this.toggleDetails(item.id);
                   }}>
                   {/*ITEM ROW INNER CONTENT --------------------------------*/}
@@ -223,14 +197,13 @@ export class TransactionPage extends Component {
           className="container"
           style={{
             display: "flex",
-            padding: "10px",
             borderRadius: "10px",
+            flexGrow: "0",
             height: "0px",
-            overflow: "hidden",
             opacity: "0",
             gap: "10px",
-            transition:
-              "padding 0.4s ease, height 0.4s ease, opacity 0.2s ease",
+            marginTop: "-50px",
+            transition: "all 0.4s ease",
           }}>
           {/*INPUT ROW -----------------------------------------------*/}
           <div style={{ display: "flex", gap: "10px" }}>

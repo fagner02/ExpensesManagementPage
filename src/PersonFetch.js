@@ -4,13 +4,15 @@ const PersonFetch = {
       .then(async (response) => {
         let temp = [];
         temp = await response.json();
-        if (temp.length === 0) {
-          return [{ id: "  -  ", name: " - " }];
+        if (temp.people.length === 0) {
+          temp.people = [{ id: "  -  ", name: " - " }];
+          return temp;
         }
-        return temp.people;
+        return temp;
       })
       .catch((error) => {
-        return [{ id: "  -  ", name: " - " }];
+        var temp = { people: [{ id: "  -  ", name: " - " }] };
+        return temp;
       });
   },
   getById: async (id) => {

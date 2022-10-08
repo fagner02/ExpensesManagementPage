@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PersonFetch from "./PersonFetch";
+import TransactionFetch from "./TransactionFetch";
 
 class Home extends Component {
   constructor(props) {
@@ -8,14 +10,24 @@ class Home extends Component {
       size: 1,
       posx: -25,
       opacity: 0,
-      persons: 0,
+      people: 0,
       transactions: 0,
+      balances: [0, 0, 0],
       height: 0,
       showHeight: 0,
     };
   }
 
   componentDidMount() {
+    PersonFetch.getAll().then((data) => {
+      this.setState({
+        people: data.people.length,
+        balances: [data.totalBalance, data.totalRevenue, data.totalExpenses],
+      });
+    });
+    TransactionFetch.getCount().then((data) => {
+      this.setState({ transactions: data.count });
+    });
     var table = document.querySelector(".main");
     var showTable = document.querySelector(".main-container>:nth-child(6)");
     table.style.height = table.clientHeight + "px";
@@ -47,7 +59,7 @@ class Home extends Component {
     return (
       <div className="main-container">
         <h1>Home</h1>
-        <h3>This is the test page</h3>
+        <h2>This is a test page</h2>
         <p>Here you can edit and access the test database</p>
         <div style={{ display: "flex" }}>
           <button
@@ -115,17 +127,19 @@ class Home extends Component {
                 padding: "10px",
                 backgroundColor: "white",
               }}>
-              <div>Persons: </div>
-              <div>Transactions: </div>
+              <div>People: {this.state.people}</div>
+              <div>Transactions: {this.state.transactions}</div>
               <div
                 style={{
                   border: "solid 1px black",
                   borderRadius: "10px",
                   marginTop: "10px",
                 }}>
-                <div className="cell">Total Balance </div>
-                <div className="cell">Revenue </div>
-                <div className="cell">Expense </div>
+                <div className="cell">
+                  Total Balance: {this.state.balances[0]}$
+                </div>
+                <div className="cell">Revenue: {this.state.balances[1]}$ </div>
+                <div className="cell">Expense: {this.state.balances[2]}$</div>
               </div>
             </div>
             <div className="link-buttons">

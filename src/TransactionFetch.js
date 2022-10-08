@@ -40,19 +40,21 @@ const TransactionFetch = {
         return [];
       });
   },
+  getCount: async () => {
+    return await fetch(process.env.REACT_APP_API + "Transaction/Count")
+      .then(async (response) => {
+        let temp = { count: 0 };
+        temp = await response.json();
+        return temp;
+      })
+      .catch((error) => {
+        return { count: 0 };
+      });
+  },
   post: (data) => {
     return fetch(process.env.REACT_APP_API + "Transaction", {
       body: JSON.stringify(data),
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  },
-  delete: async (ids) => {
-    await fetch(process.env.REACT_APP_API + "Person", {
-      method: "DELETE",
-      body: JSON.stringify({ idsToDelete: ids }),
       headers: {
         "Content-Type": "application/json",
       },
