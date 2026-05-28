@@ -11,7 +11,7 @@ package-lock.json
 
 # production
 /build
-
+/src/prisma
 # misc
 .env
 .DS_Store
@@ -20,6 +20,8 @@ package-lock.json
 .env.test.local
 .env.production.local
 
+.next
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+

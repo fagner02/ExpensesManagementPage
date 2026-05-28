@@ -1,7 +1,9 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+'use client'
+import "./global.css"
+import { Component } from "react";
 import PersonFetch from "../services/PersonService";
 import TransactionFetch from "../services/TransactionService";
+import Link from "next/link";
 
 class Home extends Component {
   constructor(props) {
@@ -146,12 +148,12 @@ class Home extends Component {
             </div>
             <div className="link-buttons">
               <button>
-                <Link className="tab-link" to="/People">
+                <Link className="tab-link" href="/People">
                   People &gt;
                 </Link>
               </button>
               <button>
-                <Link className="tab-link" to="/Transactions">
+                <Link className="tab-link" href="/Transactions">
                   Transactions &gt;
                 </Link>
               </button>

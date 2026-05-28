@@ -1,9 +1,11 @@
-import React, { Component } from "react";
-import PersonFetch from "../services/PersonService";
-import TrashIcon from "../icons/TrashIcon";
-import EditIcon from "../icons/EditIcon";
-import RefreshIcon from "../icons/RefreshIcon";
-import CheckIcon from "../icons/CheckIcon";
+'use client'
+import "@/app/global.css"
+import { Component } from "react";
+import PersonFetch from "@/services/PersonService";
+import TrashIcon from "@/icons/TrashIcon";
+import EditIcon from "@/icons/EditIcon";
+import RefreshIcon from "@/icons/RefreshIcon";
+import CheckIcon from "@/icons/CheckIcon";
 
 export class PersonPage extends Component {
   constructor(props) {
@@ -17,6 +19,7 @@ export class PersonPage extends Component {
   }
 
   refresh() {
+    console.log("fetch")
     PersonFetch.getAll().then((res) => {
       if (!this.willUnmount) {
         this.setState({ people: res.people });

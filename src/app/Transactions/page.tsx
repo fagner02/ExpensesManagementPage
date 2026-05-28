@@ -1,7 +1,9 @@
-import React, { Component } from "react";
-import TransactionFetch from "../services/TransactionService";
-import RefreshIcon from "../icons/RefreshIcon";
-import PersonFetch from "../services/PersonService";
+'use client'
+import "@/app/global.css"
+import { Component } from "react";
+import TransactionFetch from "@/services/TransactionService";
+import RefreshIcon from "@/icons/RefreshIcon";
+import PersonFetch from "@/services/PersonService";
 
 export class TransactionPage extends Component {
   constructor(props) {

@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TransactionType {
+  REVENUE
+  EXPENSE
+}
+
+model Transaction {
+  id              String          @id @default(uuid())
+  description     String
+  value           Float
+  transactionType TransactionType
+  personId        String
+
+  person Person @relation(fields: [personId], references: [id])
+}
+
+model Person {
+  id    String  @id @default(cuid())
+  name  String
+  age   Int
+  phone String?
+  email String?
+
+  transactions Transaction[]
+}
