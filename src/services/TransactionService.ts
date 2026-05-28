@@ -1,14 +1,17 @@
+import { TransactionModel } from "@/prisma/models";
+import { api } from "./axios";
 const TransactionFetch = {
     getAll: async () => {
-        return await fetch(import.meta.VITE_API_URL + "Transaction")
+        return await api
+            .get("Transaction")
             .then(async (response) => {
                 let temp = [];
-                temp = await response.json();
+                temp = await response.data;
                 if (temp.length === 0) {
                     return [
                         {
                             id: "  -  ",
-                            type: " - ",
+                            transactionType: " - ",
                             value: " - ",
                             personId: " - ",
                             description: " - ",
@@ -29,13 +32,12 @@ const TransactionFetch = {
                 ];
             });
     },
-    getDetail: async (id) => {
-        return await fetch(
-            import.meta.VITE_API_URL + "Person/" + id + "/products",
-        )
+    getDetail: async (id: string) => {
+        return await api
+            .get("Person/" + id + "/products")
             .then(async (response) => {
                 let temp = [];
-                temp = await response.json();
+                temp = await response.data();
                 return temp;
             })
             .catch((error) => {
@@ -43,20 +45,19 @@ const TransactionFetch = {
             });
     },
     getCount: async () => {
-        return await fetch(import.meta.VITE_API_URL + "Transaction/Count")
+        return await api
+            .get("Transaction/Count")
             .then(async (response) => {
                 let temp = { count: 0 };
-                temp = await response.json();
+                temp = await response.data();
                 return temp;
             })
             .catch((error) => {
                 return { count: 0 };
             });
     },
-    post: (data) => {
-        return fetch(import.meta.VITE_API_URL + "Transaction", {
-            body: JSON.stringify(data),
-            method: "POST",
+    post: (data: Partial<TransactionModel>) => {
+        return api.post("Transaction", JSON.stringify(data), {
             headers: {
                 "Content-Type": "application/json",
             },

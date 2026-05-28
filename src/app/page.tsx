@@ -1,7 +1,7 @@
 "use client";
 import "./global.css";
 import { useEffect, useRef, useState } from "react";
-import PersonFetch from "../services/PersonService";
+import PersonFetch from "@/services/PersonService";
 import TransactionFetch from "../services/TransactionService";
 import Link from "next/link";
 

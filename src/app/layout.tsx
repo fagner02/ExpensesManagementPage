@@ -6,7 +6,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html>
+        <html suppressHydrationWarning>
             <body>
                 <div className="nav">
                     <Link className="tab-link" href="/">

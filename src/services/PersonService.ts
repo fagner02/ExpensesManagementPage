@@ -4,8 +4,6 @@ const PersonFetch = {
         return axios
             .get(import.meta.env.VITE_API_URL + "/Person/TotalBalance")
             .then(async (response) => {
-                console.log(import.meta.env.VITE_API_URL);
-                console.log(response.request);
                 let temp = [];
                 temp = await response.data;
                 if (temp.people.length === 0) {
@@ -15,16 +13,16 @@ const PersonFetch = {
                 return temp;
             })
             .catch((error) => {
-                console.log(error);
                 var temp = { people: [{ id: "  -  ", name: " - " }] };
                 return temp;
             });
     },
     getById: async (id) => {
-        var result = await fetch(import.meta.VITE_API_URL + "Person/" + id)
+        var result = await axios
+            .get("Person/" + id)
             .then(async (response) => {
                 let temp = {};
-                temp = await response.json();
+                temp = await response.data;
                 return temp;
             })
             .catch((error) => {
