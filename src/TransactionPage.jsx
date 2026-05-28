@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TransactionFetch from "./TransactionFetch";
-import RefreshIcon from "./RefreshIcon";
+import RefreshIcon from "./icons/RefreshIcon";
 import PersonFetch from "./PersonFetch";
 
 export class TransactionPage extends Component {

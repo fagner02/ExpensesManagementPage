@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import PersonFetch from "./PersonFetch";
-import TrashIcon from "./TrashIcon";
-import EditIcon from "./EditIcon";
-import RefreshIcon from "./RefreshIcon";
-import CheckIcon from "./CheckIcon";
+import TrashIcon from "./icons/TrashIcon";
+import EditIcon from "./icons/EditIcon";
+import RefreshIcon from "./icons/RefreshIcon";
+import CheckIcon from "./icons/CheckIcon";
 
 export class PersonPage extends Component {
   constructor(props) {
