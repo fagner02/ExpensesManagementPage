@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import PersonFetch from "./PersonFetch";
-import TransactionFetch from "./TransactionFetch";
+import PersonFetch from "../services/PersonService";
+import TransactionFetch from "../services/TransactionService";
 
 class Home extends Component {
   constructor(props) {

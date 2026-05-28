@@ -1,7 +1,7 @@
 import "./App.css";
-import TransactionPage from "./TransactionPage";
-import PersonPage from "./PersonPage";
-import Home from "./Home";
+import TransactionPage from "./pages/TransactionPage";
+import PersonPage from "./pages/PersonPage";
+import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
