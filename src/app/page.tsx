@@ -1,179 +1,171 @@
-'use client'
-import "./global.css"
-import { Component } from "react";
+"use client";
+import "./global.css";
+import { useEffect, useRef, useState } from "react";
 import PersonFetch from "../services/PersonService";
 import TransactionFetch from "../services/TransactionService";
 import Link from "next/link";
 
-class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      size: 1,
-      posx: -25,
-      opacity: 0,
-      people: 0,
-      transactions: 0,
-      balances: [0, 0, 0],
-      height: 0,
-      showHeight: 0,
+const Home = () => {
+    const [show, setShow] = useState(false);
+    const [people, setPeople] = useState(0);
+    const [transactions, setTransactions] = useState(0);
+    const [balances, setBalances] = useState([0, 0, 0]);
+
+    const hiddenContainer = useRef<HTMLDivElement>(null);
+    const visibleContainer = useRef<HTMLDivElement>(null);
+    const visibleContainerHeight = useState<number | null>(null);
+
+    useEffect(() => {
+        PersonFetch.getAll().then((data) => {
+            setPeople(data.people.length);
+            setBalances([
+                data.totalBalance,
+                data.totalRevenue,
+                data.totalExpenses,
+            ]);
+        });
+        TransactionFetch.getCount().then((data) => {
+            setTransactions(data.count);
+        });
+        visibleContainerHeight[1](visibleContainer.current?.scrollHeight ?? 0);
+    }, []);
+
+    const setAnimation = async () => {
+        setShow(true);
     };
-  }
 
-  componentDidMount() {
-    PersonFetch.getAll().then((data) => {
-      this.setState({
-        people: data.people.length,
-        balances: [data.totalBalance, data.totalRevenue, data.totalExpenses],
-      });
-    });
-    TransactionFetch.getCount().then((data) => {
-      this.setState({ transactions: data.count });
-    });
-    var table = document.querySelector(".main");
-    var showTable = document.querySelector(".main-container>:nth-child(6)");
-    table.style.height = table.clientHeight + "px";
-    showTable.style.height = showTable.clientHeight + "px";
-    this.setState({
-      height: table.clientHeight,
-      showHeight: showTable.clientHeight,
-    });
-  }
-
-  async setAnimation() {
-    var table = document.querySelector(".main");
-    table.style.overflow = "hidden";
-    table.style.height = "0px";
-
-    setTimeout(() => {
-      var showTable = document.querySelector(
-        ".main-container>:nth-child(6)>div"
-      );
-      console.log(showTable);
-      showTable.style.top = "0px";
-      setTimeout(() => {
-        this.setState({ posx: 0, opacity: 1 });
-      }, 400);
-    }, 400);
-  }
-
-  render() {
     return (
-      <div className="main-container">
-        <h1>Home</h1>
-        <h2>This is a test page</h2>
-        <p>Here you can edit and access the test database</p>
-        <div style={{ display: "flex" }}>
-          <button
-            className="space-v"
-            onClick={() => {
-              this.setAnimation();
-            }}>
-            <b>try it</b>
-          </button>
-        </div>
-        <div
-          className="main"
-          style={{
-            display: "flex",
-            isolation: "isolate",
-            transition: "height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-          }}>
-          <div
-            className="table-container"
-            style={{
-              transform: `scale(${this.state.size})`,
-              width: "10vw",
-              background: "white",
-              zIndex: "1",
-            }}>
-            <div>
-              <p className="cell title-label full-w">database</p>
+        <div className="main-container">
+            <h1>Home</h1>
+            <h2>This is a test page</h2>
+            <p>Here you can edit and access the test database</p>
+            <div style={{ display: "flex" }}>
+                <button
+                    className="space-v"
+                    onClick={() => {
+                        setAnimation();
+                    }}
+                >
+                    <b>try it</b>
+                </button>
             </div>
-            <div>
-              <div className="cell full-w">create</div>
-            </div>
-            <div>
-              <div
-                className="cell full-w"
-                style={{ display: "flex", justifyContent: "end" }}>
-                <div style={{ margin: "0 10px" }}>update</div>
-                <div>delete</div>
-              </div>
-            </div>
-            <div>
-              <div className="cell full-w">retrieve</div>
-            </div>
-          </div>
-        </div>
-        <div
-          style={{
-            marginTop: "20px",
-            display: "flex",
-            overflow: "hidden",
-            height: "100%",
-          }}>
-          <div
-            style={{
-              display: "flex",
-              position: "relative",
-              flexWrap: "wrap",
-              gap: "10px",
-              top: "-250px",
-              height: "250px",
-              transition: "top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-            }}>
             <div
-              style={{
-                width: "200px",
-                border: "solid 1px black",
-                borderRadius: "10px",
-                padding: "10px",
-                backgroundColor: "white",
-              }}>
-              <div>People: {this.state.people}</div>
-              <div>Transactions: {this.state.transactions}</div>
-              <div
+                className="main"
+                ref={visibleContainer}
                 style={{
-                  border: "solid 1px black",
-                  borderRadius: "10px",
-                  marginTop: "10px",
-                }}>
-                <div className="cell">
-                  Total Balance: {this.state.balances[0]}$
+                    display: "flex",
+                    overflow: show ? "hidden" : "",
+                    transform: show ? "translate(0,-100%)" : "translate(0,0%)",
+                    height: show ? "0" : `${visibleContainerHeight[0]}px`,
+                    opacity: show ? "0" : "1",
+                    transition:
+                        "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                }}
+            >
+                <div
+                    className="table-container"
+                    style={{
+                        width: "10vw",
+                        background: "white",
+                        zIndex: "1",
+                    }}
+                >
+                    <div>
+                        <p className="cell title-label full-w">database</p>
+                    </div>
+                    <div>
+                        <div className="cell full-w">create</div>
+                    </div>
+                    <div>
+                        <div
+                            className="cell full-w"
+                            style={{ display: "flex", justifyContent: "end" }}
+                        >
+                            <div style={{ margin: "0 10px" }}>update</div>
+                            <div>delete</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="cell full-w">retrieve</div>
+                    </div>
                 </div>
-                <div className="cell">Revenue: {this.state.balances[1]}$ </div>
-                <div className="cell">Expense: {this.state.balances[2]}$</div>
-              </div>
             </div>
-            <div className="link-buttons">
-              <button>
-                <Link className="tab-link" href="/People">
-                  People &gt;
-                </Link>
-              </button>
-              <button>
-                <Link className="tab-link" href="/Transactions">
-                  Transactions &gt;
-                </Link>
-              </button>
-              <h3
+            <div
                 style={{
-                  transition: "all 0.5s ease",
-                  opacity: this.state.opacity,
-                  zIndex: -1,
-                  transform: `translateX(${this.state.posx}vw)`,
-                  margin: "0px",
-                }}>
-                explore the pages <br />
-                and see what you can do
-              </h3>
+                    display: "flex",
+                }}
+            >
+                <div
+                    ref={hiddenContainer}
+                    style={{
+                        display: "flex",
+                        position: "relative",
+                        flexWrap: "wrap",
+                        gap: "10px",
+                        height: "fit-content",
+                        transform: show
+                            ? "translate(0%,0%)"
+                            : "translate(0%,100%)",
+                        opacity: show ? "1" : "0",
+                        transition: "all 0.4s 0.3s",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "200px",
+                            border: "solid 1px black",
+                            borderRadius: "10px",
+                            padding: "10px",
+                            backgroundColor: "white",
+                        }}
+                    >
+                        <div>People: {people}</div>
+                        <div>Transactions: {transactions}</div>
+                        <div
+                            style={{
+                                border: "solid 1px black",
+                                borderRadius: "10px",
+                                marginTop: "10px",
+                            }}
+                        >
+                            <div className="cell">
+                                Total Balance: {balances[0]}$
+                            </div>
+                            <div className="cell">Revenue: {balances[1]}$ </div>
+                            <div className="cell">Expense: {balances[2]}$</div>
+                        </div>
+                    </div>
+                    <div className="link-buttons">
+                        <button>
+                            <Link className="tab-link" href="/People">
+                                People &gt;
+                            </Link>
+                        </button>
+                        <button>
+                            <Link className="tab-link" href="/Transactions">
+                                Transactions &gt;
+                            </Link>
+                        </button>
+                        <h3
+                            style={{
+                                transition: "all 0.5s 0.6s ease",
+                                opacity: show ? "1" : "0",
+                                zIndex: -1,
+                                transform: show
+                                    ? "translate(0%,0)"
+                                    : "translate(-100%,0)",
+
+                                margin: "0px",
+                            }}
+                        >
+                            explore the pages <br />
+                            and see what you can do
+                        </h3>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     );
-  }
-}
+};
 
 export default Home;
