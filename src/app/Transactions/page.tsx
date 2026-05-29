@@ -126,15 +126,14 @@ const TransactionPage = () => {
                                 {/*ITEM ROW INNER CONTENT --------------------------------*/}
                                 <div style={{ display: "flex", width: "100%" }}>
                                     <p className="cell title-label">
-                                        {item.id}
-                                        <sup
+                                        <span
                                             style={{
-                                                fontSize: "12px",
-                                                fontWeight: "500",
+                                                background: "white-smoke",
                                             }}
                                         >
-                                            id
-                                        </sup>
+                                            ID:
+                                        </span>{" "}
+                                        {item.id}
                                     </p>
                                     <div className="row-right">
                                         <div className="property">
