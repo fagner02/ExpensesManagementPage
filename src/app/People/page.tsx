@@ -7,6 +7,10 @@ import RefreshIcon from "@/icons/RefreshIcon";
 import CheckIcon from "@/icons/CheckIcon";
 import { useEffect, useState } from "react";
 import { PersonModel } from "@/prisma/models";
+import ItemRow from "@/components/ItemRow";
+import PersonProperties from "@/components/Person/PersonProperties";
+import PersonEdit from "@/components/Person/PersonEdit";
+import PersonDetails from "@/components/Person/PersonDetails";
 
 const PersonPage = () => {
     const [people, setPeople] = useState<
@@ -262,322 +266,25 @@ const PersonPage = () => {
                 >
                     {/* ITEM ROW ---------------------------------- */}
                     {people.map((item) => (
-                        <div
-                            className="row"
-                            id={"row" + item.id}
-                            key={item.id}
-                            style={{
-                                display: "grid",
-                                height: "auto",
-                                gridTemplate: "1fr / 1fr",
-                            }}
-                        >
-                            {/* ITEM ROW CONTENT ------------------------------*/}
-                            <div
-                                id={"row-content" + item.id}
-                                style={{
-                                    zIndex: "1",
-                                    display: "flex",
-                                    cursor: "pointer",
-                                    transition: "all 0.4s ease",
-                                    gridColumn: "1 / 1",
-                                    gridRow: "1 / 1",
-                                }}
-                                /*TOGGLE DETAIL VIEW -------------------------------------*/
-                                onClick={(e) => {
-                                    toggleDetails(item.id!);
-                                }}
-                            >
-                                {/*ITEM ROW INNER CONTENT --------------------------------*/}
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        width: "100%",
-                                    }}
-                                >
-                                    <p className="cell title-label" style={{}}>
-                                        {item.id}
-                                        <sup
-                                            style={{
-                                                fontSize: "12px",
-                                                fontWeight: "500",
-                                            }}
-                                        >
-                                            id
-                                        </sup>
-                                    </p>
-                                    <div className="row-right">
-                                        <div className="property">
-                                            <h6>Name:</h6>
-                                            <p> {item.name}</p>
-                                        </div>
-                                        <div className="property">
-                                            <h6>Age:</h6>
-                                            <p> {item.age}</p>
-                                        </div>
-                                        <div className="property">
-                                            <h6>Phone:</h6>
-                                            <p> {item.phone ?? "-"}</p>
-                                        </div>
-                                        <div className="property">
-                                            <h6>Email:</h6>
-                                            <p> {item.email ?? "-"}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/*ITEM ROW CHECKBOX --------------------------------*/}
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        checkBox(item.id!);
-                                    }}
-                                    className="checkbox"
-                                    id={"check" + item.id}
-                                >
-                                    <CheckIcon
-                                        size="20px"
-                                        stroke="black"
-                                        id={"check" + item.id}
-                                    ></CheckIcon>
-                                </button>
-
-                                {/*ITEM ROW CONTROLS --------------------------------------*/}
-                                <div
-                                    className="item-controls"
-                                    id={"a" + item.id}
-                                >
-                                    <div
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            openDeleteView(item.id!);
-                                        }}
-                                    >
-                                        <TrashIcon size="20" color="white" />
-                                    </div>
-                                    <div
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            openEdit(item.id!);
-                                        }}
-                                    >
-                                        <EditIcon size="20" color="white" />
-                                    </div>
-                                </div>
-                            </div>
-                            {/* ITEM DETAILS CONTAINER --------------------------------- */}
-                            <div>
-                                <div
-                                    id={item.id}
-                                    style={{
-                                        padding: "0px",
-                                        height: "0px",
-                                        overflow: "hidden",
-                                        transition: "all 0.4s ease",
-                                    }}
-                                >
-                                    <div className="detail-row">
-                                        {/* DETAIL ROWS --------------------------------- */}
-                                        <p>Revenue: {item.revenue}</p>
-                                    </div>
-                                    <div className="detail-row">
-                                        {/* DETAIL ROWS --------------------------------- */}
-                                        <p>Expenses: {item.expense}</p>
-                                    </div>
-                                    <div className="detail-row">
-                                        {/* DETAIL ROWS --------------------------------- */}
-                                        <p>Balance: {item.balance}</p>
-                                    </div>
-                                </div>
-
-                                {/*EDIT ITEM CONTAINER --------------------------------- */}
-                                <div
-                                    style={{
-                                        height: "0px",
-                                        padding: "0px",
-                                        transition: "all 0.5s",
-                                        overflow: "hidden",
-                                    }}
-                                    id={"edit" + item.id}
-                                >
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            gap: "10px",
-                                        }}
-                                    >
-                                        {/*EDIT INPUT ROWS ----------------------------------------------------*/}
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                gap: "10px",
-                                            }}
-                                        >
-                                            <p className="cell title-label input-label">
-                                                Name
-                                            </p>
-                                            <input
-                                                type="text"
-                                                id={"e-name" + item.id}
-                                                style={{ width: "100%" }}
-                                            />
-                                        </div>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                gap: "10px",
-                                            }}
-                                        >
-                                            <p className="cell title-label input-label">
-                                                Age
-                                            </p>
-                                            <input
-                                                type="number"
-                                                id={"e-age" + item.id}
-                                                style={{ width: "100%" }}
-                                            />
-                                        </div>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                gap: "10px",
-                                            }}
-                                        >
-                                            <p className="cell title-label input-label">
-                                                Phone
-                                            </p>
-                                            <input
-                                                type="number"
-                                                id={"e-phone" + item.id}
-                                                style={{ width: "100%" }}
-                                            />
-                                        </div>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                gap: "10px",
-                                            }}
-                                        >
-                                            <p className="cell title-label input-label">
-                                                Email
-                                            </p>
-                                            <input
-                                                type="text"
-                                                id={"e-email" + item.id}
-                                                style={{ width: "100%" }}
-                                            />
-                                        </div>
-
-                                        {/*EDIT CONTROLS -----------------------------------------------------*/}
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "end",
-                                                alignItems: "center",
-                                                gap: "10px",
-                                            }}
-                                        >
-                                            <button
-                                                onClick={(e) => {
-                                                    closeEdit(item.id!);
-                                                }}
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                onClick={(e) => {
-                                                    // var age =
-                                                    //     document.querySelector(
-                                                    //         "#e-age" + item.id,
-                                                    //     ).value;
-                                                    // var name =
-                                                    //     document.querySelector(
-                                                    //         "#e-name" + item.id,
-                                                    //     ).value;
-                                                    // var email =
-                                                    //     document.querySelector(
-                                                    //         "#e-email" +
-                                                    //             item.id,
-                                                    //     ).value;
-                                                    // var phone =
-                                                    //     document.querySelector(
-                                                    //         "#e-phone" +
-                                                    //             item.id,
-                                                    //     ).value;
-                                                    // PersonFetch.put({
-                                                    //     id: item.id,
-                                                    //     age:
-                                                    //         age === ""
-                                                    //             ? null
-                                                    //             : parseInt(age),
-                                                    //     name:
-                                                    //         name === ""
-                                                    //             ? null
-                                                    //             : name,
-                                                    //     email:
-                                                    //         email === ""
-                                                    //             ? null
-                                                    //             : email,
-                                                    //     phone:
-                                                    //         phone === ""
-                                                    //             ? null
-                                                    //             : phone,
-                                                    // }).then((data) => {
-                                                    //     this.closeEdit(item.id);
-                                                    //     this.refresh();
-                                                    // });
-                                                }}
-                                            >
-                                                Done
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/*DELETE OPTIONS --------------------------------------*/}
-                            <div
-                                style={{
-                                    gridColumn: "1 / 1",
-                                    gridRow: "1 / 1",
-                                }}
-                            >
-                                <div
-                                    id={"delete-options" + item.id}
-                                    style={{
-                                        padding: "0px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        transform: "scale(0)",
-                                        transition: "all 0.5s ease",
-                                    }}
-                                >
-                                    <button
-                                        style={{
-                                            marginRight: "10px",
-                                        }}
-                                        onClick={() => {
-                                            PersonFetch.delete([item.id!]).then(
-                                                (res) => {
-                                                    refresh();
-                                                },
-                                            );
-                                        }}
-                                    >
-                                        Yes
-                                    </button>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            closeDeleteView(item.id!);
-                                        }}
-                                    >
-                                        No
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <ItemRow
+                            toggleDetails={() => {}}
+                            checkBox={() => {}}
+                            closeDelete={() => {}}
+                            delete={() => {}}
+                            openDelete={() => {}}
+                            openEdit={() => {}}
+                            selected={false}
+                            editForm={<PersonEdit id={item.id!}></PersonEdit>}
+                            id={item.id!}
+                            details={
+                                <PersonDetails item={item}></PersonDetails>
+                            }
+                            properties={
+                                <PersonProperties
+                                    item={item}
+                                ></PersonProperties>
+                            }
+                        ></ItemRow>
                     ))}
                 </div>
             </div>
