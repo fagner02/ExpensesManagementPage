@@ -1,24 +1,25 @@
-import axios from "axios";
+import { api } from "./axios";
+import { PersonModel } from "@/prisma/models";
 const PersonFetch = {
     getAll: async () => {
-        return axios
-            .get(import.meta.env.VITE_API_URL + "/Person/TotalBalance")
+        return api
+            .get("/Person")
             .then(async (response) => {
                 let temp = [];
-                temp = await response.data;
-                if (temp.people.length === 0) {
-                    temp.people = [{ id: "  -  ", name: " - " }];
+                temp = response.data;
+                if (temp.length === 0) {
+                    temp = [{ id: "  -  ", name: " - " }];
                     return temp;
                 }
                 return temp;
             })
             .catch((error) => {
-                var temp = { people: [{ id: "  -  ", name: " - " }] };
+                var temp = [{ id: "  -  ", name: " - " }];
                 return temp;
             });
     },
-    getById: async (id) => {
-        var result = await axios
+    getById: async (id: string) => {
+        var result = await api
             .get("Person/" + id)
             .then(async (response) => {
                 let temp = {};
@@ -30,28 +31,19 @@ const PersonFetch = {
             });
         return result;
     },
-    post: (data) => {
-        return fetch(import.meta.VITE_API_URL + "Person", {
-            body: JSON.stringify(data),
+    post: (data: PersonModel) => {
+        return api.post("Person", JSON.stringify(data), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
         });
     },
-    delete: async (ids) => {
-        await fetch(import.meta.VITE_API_URL + "Person", {
-            method: "DELETE",
-            body: JSON.stringify(ids),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+    delete: async (ids: string[]) => {
+        Promise.all(ids.map((id) => api.delete(`Person/${id}`)));
     },
-    put: async (data) => {
-        await fetch(import.meta.VITE_API_URL + "Person", {
-            method: "PUT",
-            body: JSON.stringify(data),
+    put: async (data: PersonModel) => {
+        await api.put("Person", JSON.stringify(data), {
             headers: {
                 "Content-Type": "application/json",
             },

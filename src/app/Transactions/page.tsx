@@ -19,7 +19,6 @@ const TransactionPage = () => {
 
     const refresh = () => {
         TransactionFetch.getAll().then((res) => {
-            console.log(res);
             setTransactions(res);
         });
     };
@@ -276,7 +275,11 @@ const TransactionPage = () => {
                     </button>
                     <button
                         onClick={async () => {
-                            if (model.value === undefined) return;
+                            if (
+                                model.value === undefined ||
+                                model.personId === undefined
+                            )
+                                return;
 
                             var person = (await PersonFetch.getById(
                                 model.personId,

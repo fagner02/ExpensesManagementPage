@@ -11,7 +11,6 @@ export async function GET() {
             {
                 error: "Database error",
                 details: (e as Error).message,
-                e: process.env.DATABASE_URL,
             },
             { status: 500 },
         );
