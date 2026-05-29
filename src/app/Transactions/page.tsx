@@ -13,6 +13,9 @@ const TransactionPage = () => {
     >([{ id: " - ", description: " - " }]);
     const [openedAdd, setOpenedAdd] = useState(false);
     const [model, setModel] = useState<Partial<TransactionModel>>({});
+    const [openedDetails, setOpenedDetails] = useState<Map<string, number>>(
+        new Map(),
+    );
 
     const refresh = () => {
         TransactionFetch.getAll().then((res) => {
@@ -33,16 +36,16 @@ const TransactionPage = () => {
         setOpenedAdd(false);
     };
 
-    const toggleDetails = (id: string) => {
-        // const info = document.getElementById(id);
-        // if (info.style.height === "0px") {
-        //     info.style.height = `${info.scrollHeight}px`;
-        //     info.style.padding = "10px";
-        //     info.style.opacity = "1";
-        //     return;
-        // }
-        // info.style.height = "0px";
-        // info.style.padding = "0px 10px";
+    const toggleDetails = (id: string, elem: HTMLElement) => {
+        setOpenedDetails((prev) => {
+            const newSet = new Map(prev);
+            if (newSet.has(id)) {
+                newSet.delete(id);
+            } else {
+                newSet.set(id, elem.scrollHeight);
+            }
+            return newSet;
+        });
     };
 
     return (
@@ -114,12 +117,15 @@ const TransactionPage = () => {
                                 }}
                                 /*TOGGLE DETAIL VIEW -------------------------------------*/
                                 onClick={(e) => {
-                                    toggleDetails(item.id!);
+                                    toggleDetails(
+                                        item.id!,
+                                        e.target as HTMLElement,
+                                    );
                                 }}
                             >
                                 {/*ITEM ROW INNER CONTENT --------------------------------*/}
                                 <div style={{ display: "flex", width: "100%" }}>
-                                    <p className="cell title-label" style={{}}>
+                                    <p className="cell title-label">
                                         {item.id}
                                         <sup
                                             style={{
@@ -151,8 +157,15 @@ const TransactionPage = () => {
                                 <div
                                     id={item.id}
                                     style={{
-                                        padding: "0px",
-                                        height: "0px",
+                                        padding: openedDetails.has(item.id!)
+                                            ? "10px"
+                                            : "0px",
+                                        height: openedDetails.has(item.id!)
+                                            ? `${openedDetails.get(item.id!)}px`
+                                            : "0px",
+                                        opacity: openedDetails.has(item.id!)
+                                            ? "1"
+                                            : "0",
                                         overflow: "hidden",
                                         transition: "all 0.4s ease",
                                     }}
@@ -194,14 +207,16 @@ const TransactionPage = () => {
                         value={model.transactionType}
                         onChange={(e) =>
                             setModel((old) => {
-                                old.transactionType = e.target
-                                    .value! as keyof typeof TransactionType;
-                                return old;
+                                return {
+                                    ...old,
+                                    transactionType: e.target
+                                        .value! as keyof typeof TransactionType,
+                                };
                             })
                         }
                     >
-                        <option value="REVENUE">Revenue</option>
-                        <option value="EXPENSE">Expense</option>
+                        <option value={TransactionType.REVENUE}>Revenue</option>
+                        <option value={TransactionType.EXPENSE}>Expense</option>
                     </select>
                 </div>
                 <div style={{ display: "flex", gap: "10px" }}>
@@ -212,8 +227,10 @@ const TransactionPage = () => {
                         value={model.value}
                         onChange={(e) => {
                             setModel((old) => {
-                                old.value = parseFloat(e.target.value!);
-                                return old;
+                                return {
+                                    ...old,
+                                    value: parseFloat(e.target.value!),
+                                };
                             });
                         }}
                     />
@@ -226,8 +243,7 @@ const TransactionPage = () => {
                         value={model.description}
                         onChange={(e) => {
                             setModel((old) => {
-                                old.description = e.target.value;
-                                return old;
+                                return { ...old, description: e.target.value };
                             });
                         }}
                     />
@@ -240,8 +256,7 @@ const TransactionPage = () => {
                         value={model.personId}
                         onChange={(e) => {
                             setModel((old) => {
-                                old.personId = e.target.value!;
-                                return old;
+                                return { ...old, personId: e.target.value! };
                             });
                         }}
                     />

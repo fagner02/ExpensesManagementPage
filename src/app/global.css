@@ -255,6 +255,7 @@ h6 {
     display: flex;
     flex-wrap: wrap;
     overflow-wrap: anywhere;
+    align-items: center;
 }
 
 #delete-selected,
