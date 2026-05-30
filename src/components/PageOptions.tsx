@@ -1,10 +1,11 @@
 import { Pagination } from "@/lib/store/pagination";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 const PageOptions = (props: {
     pagination: Pagination;
     totalElems: number;
     refresh: () => void;
+    show: boolean;
 }) => {
     const totalPages = useMemo(() => {
         return Math.ceil(props.totalElems / props.pagination.pageSize);
@@ -21,10 +22,13 @@ const PageOptions = (props: {
                 margin: "20px var(--padding)",
                 display: "flex",
                 justifyContent: "end",
+                pointerEvents: "none",
+                opacity: props.show ? "1" : "0",
             }}
         >
             <div
                 style={{
+                    background: "white",
                     border: "1px solid",
                     borderRadius: "10px",
                     padding: "5px",
@@ -32,6 +36,7 @@ const PageOptions = (props: {
                     justifyContent: "end",
                     alignItems: "center",
                     gap: "10px",
+                    pointerEvents: "all",
                 }}
             >
                 <button

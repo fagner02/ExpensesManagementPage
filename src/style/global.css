@@ -25,6 +25,7 @@ html {
 body {
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 code {
@@ -66,7 +67,8 @@ select {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    padding-bottom: 80px;
+    overflow: visible;
 }
 
 .main-container > h2 {

@@ -117,6 +117,7 @@ const TransactionsPage = () => {
                 <TransactionAdd></TransactionAdd>
             </AddDialog>
             <PageOptions
+                show={!showAdd}
                 totalElems={totalElems}
                 pagination={pagination}
                 refresh={refresh}

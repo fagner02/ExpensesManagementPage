@@ -109,6 +109,7 @@ const PeoplePage = () => {
                 <PersonAdd></PersonAdd>
             </AddDialog>
             <PageOptions
+                show={!showAdd}
                 pagination={pagination}
                 refresh={refresh}
                 totalElems={totalElems}
