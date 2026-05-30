@@ -41,7 +41,6 @@ export const useHeight = (
 ) => {
     let p: ProxyReturn<{ value: number }> | undefined;
     const cb = () => {
-        console.log("set", p?.model.value);
         if (!p) return;
         p.model.value = setHeight();
     };

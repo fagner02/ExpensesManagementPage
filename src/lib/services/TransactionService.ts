@@ -60,7 +60,6 @@ const TransactionService = {
         return await api.delete(`Transaction/${id}`);
     },
     post: async (data: Partial<TransactionModel>) => {
-        console.log(data);
         return await api.post("Transaction", data, {
             headers: {
                 "Content-Type": "application/json",
