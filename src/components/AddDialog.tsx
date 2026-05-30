@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 const AddDialog = (props: {
     children: ReactNode;
@@ -6,17 +6,24 @@ const AddDialog = (props: {
     closeAdd: () => void;
     save: () => void;
 }) => {
+    const [height, setHeight] = useState(0);
+    const container = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        setHeight(container.current?.scrollHeight ?? 0);
+    }, []);
+
     return (
         <div
+            ref={container}
             className="container"
             style={{
                 transition: "all 0.4s ease",
                 flexGrow: props.show ? "1" : "0",
-                height: props.show ? "100%" : "0px",
+                height: props.show ? `${height}px` : "0px",
                 opacity: props.show ? "1" : "0",
                 visibility: props.show ? "visible" : "hidden",
+                transform: props.show ? "translateY(0%)" : "translateY(50%)",
                 gap: "10px",
-                marginTop: props.show ? "0" : "-50px",
                 overflow: "hidden",
             }}
         >
