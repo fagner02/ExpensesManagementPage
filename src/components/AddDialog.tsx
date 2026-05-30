@@ -14,8 +14,10 @@ const AddDialog = (props: {
                 flexGrow: props.show ? "1" : "0",
                 height: props.show ? "100%" : "0px",
                 opacity: props.show ? "1" : "0",
+                visibility: props.show ? "visible" : "hidden",
                 gap: "10px",
                 marginTop: props.show ? "0" : "-50px",
+                overflow: "hidden",
             }}
         >
             {/*INPUT ROW -----------------------------------------------*/}
@@ -28,14 +30,16 @@ const AddDialog = (props: {
                 }}
             >
                 <button
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.stopPropagation();
                         props.closeAdd();
                     }}
                 >
                     Cancel
                 </button>
                 <button
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.stopPropagation();
                         props.save();
                         props.closeAdd();
                     }}

@@ -11,6 +11,7 @@ import PersonDetails from "@/components/People/PersonDetails";
 import { getPersonEditModel, personModel } from "@/lib/store/personModel";
 import AddDialog from "../AddDialog";
 import PersonAdd from "./PersonAdd";
+import ItemList from "../ItemList";
 
 const PeoplePage = () => {
     const [people, setPeople] = useState<
@@ -60,15 +61,7 @@ const PeoplePage = () => {
                     </button>
                 </div>
             </div>
-            <div
-                className="container"
-                style={{
-                    height: showAdd ? "0" : "100%",
-                    transform: showAdd ? "translateY(10%)" : "translateY(0)",
-                    opacity: showAdd ? "0" : "1",
-                    transition: "all 0.5s ease-out",
-                }}
-            >
+            <ItemList show={showAdd}>
                 {/* ITEM ROW ---------------------------------- */}
                 {people.map((item) => (
                     <ItemRow
@@ -91,7 +84,7 @@ const PeoplePage = () => {
                         }
                     ></ItemRow>
                 ))}
-            </div>
+            </ItemList>
             {/* ADD ITEM CONTAINER ------------------------------------- */}
             <AddDialog
                 show={showAdd}

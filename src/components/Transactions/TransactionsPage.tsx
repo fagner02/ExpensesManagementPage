@@ -14,6 +14,7 @@ import {
 } from "@/lib/store/transactionModel";
 import AddDialog from "../AddDialog";
 import TransactionAdd from "./TransactionAdd";
+import ItemList from "../ItemList";
 
 const TransactionsPage = () => {
     const [transactions, setTransactions] = useState<
@@ -61,15 +62,7 @@ const TransactionsPage = () => {
                 </div>
             </div>
 
-            <div
-                className="container"
-                style={{
-                    transition: "all 0.5s ease-out",
-                    opacity: showAdd ? "0" : "1",
-                    height: showAdd ? "0" : "100%",
-                    transform: showAdd ? "translateY(10%)" : "translateY(0)",
-                }}
-            >
+            <ItemList show={showAdd}>
                 {/* ITEM ROW ---------------------------------- */}
                 {transactions.map((item) => (
                     <ItemRow
@@ -100,7 +93,7 @@ const TransactionsPage = () => {
                         }
                     ></ItemRow>
                 ))}
-            </div>
+            </ItemList>
             {/* ADD ITEM CONTAINER ------------------------------------- */}
             <AddDialog
                 show={showAdd}

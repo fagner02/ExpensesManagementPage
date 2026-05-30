@@ -64,6 +64,7 @@ select {
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .main-container > h2 {
@@ -79,9 +80,10 @@ select {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    background: black;
+    background: var(--nav-button);
     border-radius: 5px;
     transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+    flex-grow: 1;
 }
 
 .item-controls > div {
@@ -109,7 +111,6 @@ select {
 .container {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
     flex-grow: 1;
     gap: 10px;
 }

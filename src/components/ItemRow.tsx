@@ -51,6 +51,7 @@ const ItemRow = ({
                                 display: "flex",
                                 cursor: "pointer",
                                 transition: "all 0.4s ease",
+                                flexWrap: "wrap-reverse",
                             }}
                             /*TOGGLE DETAIL VIEW -------------------------------------*/
                             onClick={() => {
@@ -64,10 +65,6 @@ const ItemRow = ({
                                     width: "100%",
                                 }}
                             >
-                                <p className="cell title-label">
-                                    ID:
-                                    {item.id}
-                                </p>
                                 <div className="row-right">{properties}</div>
                             </div>
                             {/*ITEM ROW CONTROLS --------------------------------------*/}
@@ -80,7 +77,7 @@ const ItemRow = ({
                                 >
                                     <TrashIcon size="15" color="white" />
                                 </div>
-                                <hr></hr>
+                                <hr style={{ margin: "0" }}></hr>
                                 <div
                                     onClick={(e) => {
                                         e.stopPropagation();
