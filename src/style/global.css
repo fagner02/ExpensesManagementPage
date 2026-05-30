@@ -234,10 +234,7 @@ h6 {
     border: 1px solid black;
     border-radius: 10px;
     padding: 0 7px;
-}
-
-.detail-row + .detail-row {
-    margin-top: 10px;
+    flex: 1;
 }
 
 .checkbox {

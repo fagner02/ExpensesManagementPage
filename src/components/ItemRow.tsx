@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import TrashIcon from "@/components/icons/TrashIcon";
 import EditIcon from "@/components/icons/EditIcon";
 import EditModel from "./EditDialog";
 import DeleteDialog from "./DeleteDialog";
 import { ItemRowProvider } from "./ItemRowContext";
 import { getPersonEditModel, personModel } from "@/lib/store/personModel";
+import { useHeight } from "@/lib/store/store";
 
 const ItemRow = ({
     item,
@@ -24,13 +25,12 @@ const ItemRow = ({
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
-    const [detailsHeight, setDetailsHeight] = useState(0);
+
     const detailsContainer = useRef<HTMLDivElement>(null);
     const rowRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        setDetailsHeight(detailsContainer.current?.scrollHeight ?? 0);
-    }, []);
+    const detailsHeight = useHeight(
+        () => detailsContainer.current?.scrollHeight ?? 0,
+    );
 
     return (
         <ItemRowProvider
@@ -38,12 +38,14 @@ const ItemRow = ({
             updateCallback={updateCallback}
         >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <div ref={rowRef} className="row">
+                <div className="row">
                     {/* ITEM ROW CONTENT ------------------------------*/}
                     <div
+                        ref={rowRef}
                         style={{
                             gridArea: "unit",
                             zIndex: 1,
+                            height: "fit-content",
                         }}
                     >
                         <div
@@ -101,18 +103,26 @@ const ItemRow = ({
                         </div>
                         {/* ITEM DETAILS CONTAINER --------------------------------- */}
                         <div
-                            ref={detailsContainer}
                             style={{
-                                padding: showDetails ? "10px" : "0px",
                                 height: showDetails
-                                    ? `${detailsHeight}px`
+                                    ? `${detailsHeight.value}px`
                                     : "0px",
                                 opacity: showDetails ? "1" : "0",
                                 overflow: "hidden",
                                 transition: "all 0.4s ease",
                             }}
                         >
-                            {details}
+                            <div
+                                ref={detailsContainer}
+                                style={{
+                                    padding: "10px",
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: "10px",
+                                }}
+                            >
+                                {details}
+                            </div>
                         </div>
                     </div>
                     {/*DELETE OPTIONS --------------------------------------*/}

@@ -1,5 +1,6 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useRef } from "react";
 import { useItemRowContext } from "./ItemRowContext";
+import { useHeight } from "@/lib/store/store";
 
 const EditModel = (props: {
     show: boolean;
@@ -7,17 +8,16 @@ const EditModel = (props: {
     closeEdit: () => void;
     rowRef: RefObject<HTMLDivElement | null>;
 }) => {
-    const [height, setHeight] = useState(0);
     const container = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        setHeight(
+    const height = useHeight(
+        () =>
             Math.max(
                 props.rowRef.current?.clientHeight ?? 0,
                 container.current?.scrollHeight ?? 0,
             ),
-        );
-    }, [props.show]);
+        [props.show],
+    );
 
     const { updateCallback } = useItemRowContext()!;
 
@@ -26,7 +26,7 @@ const EditModel = (props: {
             ref={container}
             style={{
                 background: "white",
-                height: props.show ? `${height}px` : "0px",
+                height: props.show ? `${height.value}px` : "0px",
                 padding: props.show ? "10px" : "0px",
                 opacity: props.show ? "1" : "0",
                 visibility: props.show ? "visible" : "hidden",

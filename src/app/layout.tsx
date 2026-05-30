@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GlobalListeners } from "./GlobalListeners";
 
 export default function RootLayout({
     children,
@@ -19,6 +20,7 @@ export default function RootLayout({
                         Transactions
                     </Link>
                 </div>
+                <GlobalListeners></GlobalListeners>
                 {children}
             </body>
         </html>

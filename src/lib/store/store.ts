@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { DependencyList, useEffect, useRef, useSyncExternalStore } from "react";
 
 export type ProxyReturn<T> = { model: T; useModel: () => T };
 
@@ -29,4 +29,41 @@ export const proxy = <T>(value: T): ProxyReturn<T> => {
             return p;
         },
     };
+};
+
+export const setHeightCallbacks = new Map<
+    Function,
+    { p: ProxyReturn<{ value: number }>; cb: Function }
+>();
+export const useHeight = (
+    setHeight: () => number,
+    deps: DependencyList = [],
+) => {
+    let p: ProxyReturn<{ value: number }> | undefined;
+    const cb = () => {
+        console.log("set", p?.model.value);
+        if (!p) return;
+        p.model.value = setHeight();
+    };
+    const cbRef = useRef(cb);
+    const storedProxy = setHeightCallbacks.get(cbRef.current);
+    if (storedProxy) {
+        p = storedProxy.p;
+        storedProxy.cb = cb;
+    } else {
+        p = proxy({ value: 0 });
+        cb();
+        setHeightCallbacks.set(cbRef.current, { p, cb });
+    }
+
+    useEffect(() => {
+        cb();
+    }, deps);
+    useEffect(() => {
+        return () => {
+            p = undefined;
+            setHeightCallbacks.delete(cbRef.current);
+        };
+    }, []);
+    return p.useModel();
 };

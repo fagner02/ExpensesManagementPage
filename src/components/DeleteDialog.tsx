@@ -1,4 +1,5 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { useHeight } from "@/lib/store/store";
+import { RefObject, useRef } from "react";
 
 const DeleteDialog = ({
     deleteCallback,
@@ -11,22 +12,16 @@ const DeleteDialog = ({
     show: boolean;
     rowRef: RefObject<HTMLDivElement | null>;
 }) => {
-    const [height, setHeight] = useState(0);
     const container = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        setHeight(container.current?.clientHeight ?? 0);
-    }, []);
-
-    useEffect(() => {
-        setHeight(
+    const height = useHeight(
+        () =>
             Math.max(
                 rowRef.current?.clientHeight ?? 0,
-                container.current?.scrollHeight ?? 0,
+                (container.current?.scrollHeight ?? 0) - 1,
             ),
-        );
-    }, [show]);
-
+        [show],
+    );
     return (
         <div
             style={{
@@ -38,7 +33,7 @@ const DeleteDialog = ({
                 zIndex: "1",
                 overflow: "hidden",
                 padding: show ? "10px" : "0px",
-                height: show ? `${height}px` : "0",
+                height: show ? `${height.value}px` : "0",
                 display: "flex",
                 placeContent: "center",
             }}
