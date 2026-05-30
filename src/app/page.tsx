@@ -1,8 +1,8 @@
 "use client";
-import "./global.css";
+import "@/style/global.css";
 import { useEffect, useRef, useState } from "react";
-import PersonService from "@/services/PersonService";
-import TransactionFetch from "../services/TransactionService";
+import PersonService from "@/lib/services/PersonService";
+import TransactionFetch from "../lib/services/TransactionService";
 import Link from "next/link";
 
 const Home = () => {

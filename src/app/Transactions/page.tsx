@@ -1,9 +1,9 @@
 "use client";
 import "@/app/global.css";
 import { useEffect, useState } from "react";
-import TransactionFetch from "@/services/TransactionService";
+import TransactionFetch from "@/lib/services/TransactionService";
 import RefreshIcon from "@/icons/RefreshIcon";
-import PersonService from "@/services/PersonService";
+import PersonService from "@/lib/services/PersonService";
 import type { PersonModel, TransactionModel } from "@/prisma/models";
 import { TransactionType } from "@/prisma/enums";
 

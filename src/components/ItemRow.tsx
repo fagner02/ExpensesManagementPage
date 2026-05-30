@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import CheckIcon from "@/icons/CheckIcon";
-import TrashIcon from "@/icons/TrashIcon";
-import EditIcon from "@/icons/EditIcon";
+import TrashIcon from "@/components/icons/TrashIcon";
+import EditIcon from "@/components/icons/EditIcon";
 import EditModel from "./EditDialog";
 import DeleteDialog from "./DeleteDialog";
 import { ItemRowProvider } from "./ItemRowContext";
-import { getPersonEditModel, personModel } from "@/store/personModel";
+import { getPersonEditModel, personModel } from "@/lib/store/personModel";
 
 const ItemRow = ({
     item,
@@ -85,7 +84,6 @@ const ItemRow = ({
                                 <div
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        console.log(Object.keys(personModel));
                                         Object.assign(
                                             getPersonEditModel(item.id!).model,
                                             Object.fromEntries(

@@ -31,9 +31,8 @@ const PersonService = {
             });
         return result;
     },
-    post: (data: PersonModel) => {
-        return api.post("Person", JSON.stringify(data), {
-            method: "POST",
+    post: (data: Partial<PersonModel>) => {
+        return api.post("Person", data, {
             headers: {
                 "Content-Type": "application/json",
             },

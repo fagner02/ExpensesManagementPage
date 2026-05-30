@@ -1,4 +1,4 @@
-import { getPersonEditModel } from "@/store/personModel";
+import { getPersonEditModel } from "@/lib/store/personModel";
 
 const PersonEdit = (props: { id: string }) => {
     const model = getPersonEditModel(props.id).useModel();
