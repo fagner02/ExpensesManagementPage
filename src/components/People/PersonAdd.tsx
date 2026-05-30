@@ -10,7 +10,6 @@ const PersonAdd = () => {
                 <input
                     type="number"
                     name="age"
-                    value={model.age}
                     onChange={(e) => {
                         model.age = parseInt(e.target.value);
                     }}
@@ -21,7 +20,6 @@ const PersonAdd = () => {
                 <input
                     type="text"
                     name="name"
-                    value={model.name}
                     onChange={(e) => {
                         model.name = e.target.value;
                     }}
@@ -32,7 +30,6 @@ const PersonAdd = () => {
                 <input
                     type="number"
                     name="phone"
-                    value={model.phone ?? ""}
                     onChange={(e) => {
                         model.phone = e.target.value;
                     }}
@@ -43,7 +40,6 @@ const PersonAdd = () => {
                 <input
                     type="text"
                     name="email"
-                    value={model.email ?? ""}
                     onChange={(e) => {
                         model.email = e.target.value;
                     }}

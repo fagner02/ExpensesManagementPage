@@ -9,7 +9,6 @@ const TransactionAdd = () => {
             <div style={{ display: "flex", gap: "10px" }}>
                 <p className="cell title-label input-label">Type</p>
                 <select
-                    value={model.transactionType}
                     onChange={(e) => {
                         model.transactionType = e.target
                             .value as keyof typeof TransactionType;
@@ -25,7 +24,6 @@ const TransactionAdd = () => {
                 <input
                     type="text"
                     name="value"
-                    value={model.value}
                     onChange={(e) => {
                         model.value = parseFloat(e.target.value!);
                     }}
@@ -36,7 +34,6 @@ const TransactionAdd = () => {
                 <input
                     type="text"
                     name="description"
-                    value={model.description}
                     onChange={(e) => {
                         model.description = e.target.value;
                     }}
@@ -47,7 +44,6 @@ const TransactionAdd = () => {
                 <input
                     type="number"
                     name="person-id"
-                    value={model.personId}
                     onChange={(e) => {
                         model.personId = e.target.value!;
                     }}

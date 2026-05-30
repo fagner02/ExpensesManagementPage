@@ -73,6 +73,7 @@ const TransactionsPage = () => {
                 {/* ITEM ROW ---------------------------------- */}
                 {transactions.map((item) => (
                     <ItemRow
+                        key={item.id}
                         deleteCallback={async () => {
                             await TransactionService.delete(item.id!);
                             refresh();
