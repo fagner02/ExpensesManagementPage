@@ -12,6 +12,8 @@ import { getPersonEditModel, personModel } from "@/lib/store/personModel";
 import AddDialog from "../AddDialog";
 import PersonAdd from "./PersonAdd";
 import ItemList from "../ItemList";
+import { usePagination } from "@/lib/store/pagination";
+import PageOptions from "../PageOptions";
 
 const PeoplePage = () => {
     const [people, setPeople] = useState<
@@ -24,11 +26,15 @@ const PeoplePage = () => {
 
     const [loading, setLoading] = useState(true);
 
+    const [totalElems, setTotalElems] = useState(0);
+    const pagination = usePagination();
+
     const refresh = () => {
         setLoading(true);
-        PersonService.getAll().then((res) => {
-            setPeople(res);
+        PersonService.getAll(pagination).then((res) => {
+            setPeople(res.people);
             setLoading(false);
+            setTotalElems(res.totalCount);
         });
     };
 
@@ -102,6 +108,11 @@ const PeoplePage = () => {
             >
                 <PersonAdd></PersonAdd>
             </AddDialog>
+            <PageOptions
+                pagination={pagination}
+                refresh={refresh}
+                totalElems={totalElems}
+            ></PageOptions>
         </div>
     );
 };

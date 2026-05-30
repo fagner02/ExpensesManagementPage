@@ -1,6 +1,8 @@
 :root {
     --back: hsl(0, 0%, 80%);
-    --nav-button: hsl(0, 0%, 10%);
+    --background: hsl(0, 0%, 10%);
+    --disabled-background: hsl(0, 0%, 30%);
+    --padding: 10vw;
 }
 
 body,
@@ -32,7 +34,7 @@ code {
 
 input,
 select {
-    border: 1px solid var(--nav-button);
+    border: 1px solid var(--background);
     border-radius: 10px;
     font-size: 0.9rem;
     padding: 2px 5px;
@@ -60,7 +62,7 @@ select {
 }
 
 .main-container {
-    padding: 0px 10vw;
+    padding: 0px var(--padding);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -80,7 +82,7 @@ select {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    background: var(--nav-button);
+    background: var(--background);
     border-radius: 5px;
     transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.5);
     flex-grow: 1;
@@ -91,7 +93,7 @@ select {
 }
 
 .tab-link {
-    background: var(--nav-button);
+    background: var(--background);
     color: white;
     margin: 10px 15px 10px 5px;
     border: none;
@@ -105,7 +107,7 @@ select {
     justify-content: flex-start;
     align-items: center;
     padding: 0px 1vw;
-    background: var(--nav-button);
+    background: var(--background);
 }
 
 .container {
@@ -121,7 +123,7 @@ select {
 }
 
 .container::-webkit-scrollbar-thumb {
-    background: var(--nav-button);
+    background: var(--background);
     border-radius: 10px;
 }
 
@@ -135,7 +137,7 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: hsl(0, 0%, 20%);
+    background: var(--background);
     color: white;
     border-radius: 5px;
     padding: 2px 4px;
@@ -143,14 +145,18 @@ select {
     flex-grow: 0;
 }
 button {
-    background: var(--nav-button);
+    background: var(--background);
     color: white;
     font-size: 1.1rem;
     padding: 5px 10px;
-    border: 1px solid black;
     border-radius: 10px;
     outline: none;
     cursor: pointer;
+    border: none;
+}
+
+button:disabled {
+    background: var(--disabled-background);
 }
 
 .space-v {
@@ -246,6 +252,8 @@ h6 {
     height: 15px;
     width: 15px;
     padding: 2px;
+    position: absolute;
+    right: -30px;
 }
 .property {
     display: flex;
@@ -283,13 +291,13 @@ h6 {
     position: absolute;
     overflow: hidden;
     transform: translateY(-200%);
+    transition: 0.5s all;
 }
 
 .loader-on {
     height: 10px;
     opacity: 1;
     content-visibility: visible;
-    transition: 0.5s all;
 }
 .loader > div {
     height: 10px;

@@ -1,18 +1,21 @@
 import { TransactionModel } from "@/prisma/models";
 import { api } from "./axios";
+
 const TransactionService = {
-    getAll: async () => {
+    getAll: async (pagination: {
+        page: number;
+        pageSize: number;
+    }): Promise<{ transactions: TransactionModel[]; totalCount: number }> => {
         return await api
-            .get("Transaction")
+            .get(
+                `Transaction?page=${pagination.page}&pageSize=${pagination.pageSize}`,
+            )
             .then(async (response) => {
                 let temp = await response.data;
-                if (temp.length === 0) {
-                    return [];
-                }
                 return temp;
             })
             .catch(() => {
-                return [];
+                return { transactions: [], totalCount: 0 };
             });
     },
     getDetail: async (id: string) => {

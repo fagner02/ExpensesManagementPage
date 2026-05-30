@@ -1,15 +1,16 @@
+import { Pagination } from "../store/pagination";
 import { api } from "./axios";
 import { PersonModel } from "@/prisma/models";
 const PersonService = {
-    getAll: async () => {
+    getAll: async (
+        pagination: Pagination,
+    ): Promise<{ people: []; totalCount: number }> => {
         return await api
-            .get("/Person")
+            .get(
+                `/Person?page=${pagination.page}&pageSize=${pagination.pageSize}`,
+            )
             .then(async (response) => {
                 let temp = response.data;
-                if (temp.length === 0) {
-                    temp = [];
-                    return temp;
-                }
                 return temp;
             })
             .catch(() => {

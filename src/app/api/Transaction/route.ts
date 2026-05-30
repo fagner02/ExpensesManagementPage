@@ -2,10 +2,23 @@ import { prisma } from "@/lib/db";
 import { HttpStatusCode } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
-        const transactions = await prisma.transaction.findMany();
-        const res = NextResponse.json(transactions);
+        const params = req.nextUrl.searchParams;
+        const page = parseInt(params.get("page") ?? "0");
+        const pageSize = parseInt(params.get("pageSize") ?? "5");
+
+        const queryRes = await prisma.$transaction([
+            prisma.transaction.count(),
+            prisma.transaction.findMany({
+                skip: page * pageSize,
+                take: pageSize,
+            }),
+        ]);
+        const res = NextResponse.json({
+            totalCount: queryRes[0],
+            transactions: queryRes[1],
+        });
         return res;
     } catch (e) {
         return NextResponse.json(

@@ -1,6 +1,6 @@
 "use client";
 import "@/style/global.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TransactionService from "@/lib/services/TransactionService";
 import RefreshIcon from "@/components/icons/RefreshIcon";
 import type { TransactionModel } from "@/prisma/models";
@@ -15,6 +15,8 @@ import {
 import AddDialog from "../AddDialog";
 import TransactionAdd from "./TransactionAdd";
 import ItemList from "../ItemList";
+import { usePagination } from "@/lib/store/pagination";
+import PageOptions from "../PageOptions";
 
 const TransactionsPage = () => {
     const [transactions, setTransactions] = useState<
@@ -22,12 +24,16 @@ const TransactionsPage = () => {
     >([{ id: " - ", description: " - " }]);
     const [showAdd, setShowAdd] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [totalElems, setTotalElems] = useState(0);
+
+    const pagination = usePagination();
 
     const refresh = () => {
         setLoading(true);
-        TransactionService.getAll().then((res) => {
-            setTransactions(res);
+        TransactionService.getAll(pagination).then((res) => {
+            setTransactions(res.transactions);
             setLoading(false);
+            setTotalElems(res.totalCount);
         });
     };
 
@@ -110,6 +116,11 @@ const TransactionsPage = () => {
             >
                 <TransactionAdd></TransactionAdd>
             </AddDialog>
+            <PageOptions
+                totalElems={totalElems}
+                pagination={pagination}
+                refresh={refresh}
+            ></PageOptions>
         </div>
     );
 };
