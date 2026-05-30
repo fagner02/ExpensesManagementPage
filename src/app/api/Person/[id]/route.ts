@@ -33,3 +33,21 @@ export async function PUT(
         );
     }
 }
+
+export async function DELETE(
+    _: NextRequest,
+    { params }: { params: Promise<{ id: string }> },
+) {
+    try {
+        const { id } = await params;
+        await prisma.person.delete({ where: { id } });
+        return NextResponse.json({}, { status: HttpStatusCode.Ok });
+    } catch (e) {
+        return NextResponse.json(
+            {
+                details: (e as Error).message,
+            },
+            { status: HttpStatusCode.InternalServerError },
+        );
+    }
+}
