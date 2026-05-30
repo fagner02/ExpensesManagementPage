@@ -3,7 +3,7 @@ import "@/app/global.css";
 import { useEffect, useState } from "react";
 import TransactionFetch from "@/services/TransactionService";
 import RefreshIcon from "@/icons/RefreshIcon";
-import PersonFetch from "@/services/PersonService";
+import PersonService from "@/services/PersonService";
 import type { PersonModel, TransactionModel } from "@/prisma/models";
 import { TransactionType } from "@/prisma/enums";
 
@@ -281,7 +281,7 @@ const TransactionPage = () => {
                             )
                                 return;
 
-                            var person = (await PersonFetch.getById(
+                            var person = (await PersonService.getById(
                                 model.personId,
                             )) as PersonModel;
 

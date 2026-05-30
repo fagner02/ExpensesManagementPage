@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { HttpStatusCode } from "axios";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -19,7 +20,7 @@ export async function GET() {
                 error: "Database error",
                 details: (e as Error).message,
             },
-            { status: 500 },
+            { status: HttpStatusCode.InternalServerError },
         );
     }
 }

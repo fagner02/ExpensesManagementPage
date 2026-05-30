@@ -1,6 +1,6 @@
 "use client";
 import "@/app/global.css";
-import PersonFetch from "@/services/PersonService";
+import PersonService from "@/services/PersonService";
 import TrashIcon from "@/icons/TrashIcon";
 import EditIcon from "@/icons/EditIcon";
 import RefreshIcon from "@/icons/RefreshIcon";
@@ -11,6 +11,7 @@ import ItemRow from "@/components/ItemRow";
 import PersonProperties from "@/components/Person/PersonProperties";
 import PersonEdit from "@/components/Person/PersonEdit";
 import PersonDetails from "@/components/Person/PersonDetails";
+import { getPersonEditModel, personModel } from "@/store/personModel";
 
 const PersonPage = () => {
     const [people, setPeople] = useState<
@@ -20,12 +21,9 @@ const PersonPage = () => {
             balance?: number;
         })[]
     >([{ id: " - ", name: " - " }]);
-    const [selected, setSelected] = useState<string[]>([]);
-    const [checked, setChecked] = useState<Set<string>>(new Set());
 
     const refresh = () => {
-        PersonFetch.getAll().then((res) => {
-            console.log(res);
+        PersonService.getAll().then((res) => {
             setPeople(res);
         });
     };
@@ -34,176 +32,10 @@ const PersonPage = () => {
         refresh();
     }, []);
 
-    const checkBox = (id: string) => {
-        // const box = document.querySelector(`.checkbox#check${id}`);
-        // const icon = document.querySelector(`.checkbox>#check${id}`);
-        // const path = document.querySelector(`.checkbox>#check${id}>path`);
-        // const button = document.querySelectorAll(`#delete-selected,#uncheck`);
-        // icon.style.transformOrigin = "center";
-        // box.style.transition = "background-color 0.3s ease-in-out";
-        // icon.style.transition = "all 0.3s ease-in-out";
-        // path.style.transition = "all 0.3s ease-in-out";
-        // if (
-        //     box.style.backgroundColor === "white" ||
-        //     box.style.backgroundColor === ""
-        // ) {
-        //     box.style.backgroundColor = "black";
-        //     path.setAttribute("stroke", "white");
-        //     icon.style.rotate = "0deg";
-        //     if (this.state.selected.length === 0) {
-        //         button.forEach((x) => {
-        //             x.style.scale = "1";
-        //             x.style.opacity = "1";
-        //         });
-        //     }
-        //     this.state.selected.push(id);
-        //     return;
-        // }
-        // box.style.backgroundColor = "white";
-        // path.setAttribute("stroke", "black");
-        // icon.style.rotate = "45deg";
-        // this.state.selected.splice(this.state.selected.indexOf(id), 1);
-        // if (this.state.selected.length === 0) {
-        //     button.forEach((x) => {
-        //         x.style.scale = "0";
-        //         x.style.opacity = "0";
-        //     });
-        // }
-    };
+    const openAddPerson = () => {};
 
-    const uncheckAll = () => {
-        // while (this.state.selected.length > 0) {
-        //     this.checkBox(this.state.selected[0]);
-        // }
-    };
+    const closeAddPerson = () => {};
 
-    const openAddPerson = () => {
-        // const detailMenu = document.querySelector(".container :nth-child(1)");
-        // const addMenu = document.querySelectorAll(".container")[1];
-        // const container = document.querySelector(".container");
-        // if (container.style.flexGrow === "0") {
-        //     return;
-        // }
-        // container.style.height = "0px";
-        // container.style.flexGrow = "0";
-        // setTimeout(() => {
-        //     detailMenu.style.opacity = "0";
-        // }, 300);
-        // setTimeout(() => {
-        //     addMenu.style.height = "100%";
-        //     addMenu.style.padding = "0px";
-        //     addMenu.style.opacity = "1";
-        // }, 400);
-    };
-
-    const closeAddPerson = () => {
-        // const addMenu = document.getElementsByClassName("container")[1];
-        // const container = document.querySelector(".container");
-        // const detailMenu = document.querySelector(".container :nth-child(1)");
-        // if (addMenu.style.height === "0px") {
-        //     return;
-        // }
-        // addMenu.style.height = "0px";
-        // addMenu.style.padding = "0px 0px";
-        // setTimeout(() => {
-        //     addMenu.style.opacity = "0";
-        // }, 300);
-        // setTimeout(() => {
-        //     detailMenu.style.opacity = "1";
-        //     container.style.flexGrow = "1";
-        //     container.style.height = "100%";
-        //     this.refresh();
-        // }, 400);
-    };
-
-    const openEdit = (id: string) => {
-        // const info = document.getElementById(id);
-        // const edit = document.querySelector(`#edit${id}`);
-        // if (info.style.height === "0px") {
-        //     return;
-        // }
-        // info.style.height = "0px";
-        // info.style.padding = "0px";
-        // info.style.opacity = "0";
-        // setTimeout(() => {
-        //     edit.style.height = `${edit.scrollHeight}px`;
-        //     edit.style.padding = "10px";
-        // }, 500);
-    };
-
-    const closeEdit = (id: string) => {
-        // const info = document.getElementById(id);
-        // const edit = document.querySelector(`#edit${id}`);
-        // if (edit.style.height === "0px") {
-        //     return;
-        // }
-        // edit.style.height = "0px";
-        // edit.style.padding = "0px";
-        // setTimeout(() => {
-        //     info.style.height = `${info.scrollHeight}px`;
-        //     info.style.padding = "10px";
-        //     info.style.opacity = "1";
-        // }, 500);
-    };
-
-    const toggleDetails = (id: string) => {
-        // const info = document.getElementById(id);
-        // const edit = document.querySelector(`#edit${id}`);
-        // const controls = document.querySelector(`#a${id}`);
-        // const check = document.querySelector(`.checkbox#check${id}`);
-        // if (info.style.height === "0px" && edit.style.height === "0px") {
-        //     check.style.opacity = "0";
-        //     check.style.scale = "0";
-        //     check.style.width = "0px";
-        //     info.style.height = `${info.scrollHeight}px`;
-        //     info.style.padding = "10px";
-        //     info.style.opacity = "1";
-        //     controls.style.transform = "scale(1)";
-        //     controls.style.opacity = "1";
-        //     controls.style.width = "fit-content";
-        //     return;
-        // }
-        // info.style.height = "0px";
-        // info.style.padding = "0px 10px";
-        // edit.style.height = "0px";
-        // edit.style.padding = "0px";
-        // controls.style.transform = "scale(0)";
-        // controls.style.opacity = "0";
-        // controls.style.width = "0px";
-        // check.style.opacity = "1";
-        // check.style.scale = "1";
-        // check.style.width = "fit-content";
-    };
-
-    const openDeleteView = (id: string) => {
-        // const elem = document.querySelector(`#row-content${id}`);
-        // const controls = document.querySelector(`#delete-options${id}`);
-        // this.toggleDetails(id);
-        // controls.style.transform = "scale(1)";
-        // controls.style.padding = "10px";
-        // controls.style.opacity = "1";
-        // elem.style.opacity = "0";
-        // elem.style.height = "0px";
-        // elem.style.padding = "0px";
-        // elem.style.overflow = "hidden";
-    };
-
-    const closeDeleteView = (id: string) => {
-        // const elem = document.querySelector(`#row-content${id}`);
-        // const controls = document.querySelector(`#delete-options${id}`);
-        // if (elem.style.height !== "0px") {
-        //     return;
-        // }
-        // this.toggleDetails(id);
-        // controls.style.opacity = "0";
-        // controls.style.transform = "scale(0)";
-        // controls.style.padding = "0px";
-        // elem.style.opacity = "1";
-        // elem.style.height = `${elem.scrollHeight}px`;
-        // setTimeout(() => {
-        //     elem.style.height = "auto";
-        // }, 500);
-    };
     return (
         <div className="main-container">
             <h1>Hello</h1>
@@ -225,34 +57,7 @@ const PersonPage = () => {
                     >
                         Add Person
                     </button>
-                    <button
-                        id="delete-selected"
-                        onClick={() => {
-                            PersonFetch.delete(selected).then(() => {
-                                refresh();
-                                setSelected([]);
-                            });
-                        }}
-                    >
-                        Delete
-                    </button>
                 </div>
-                <button
-                    id="uncheck"
-                    style={{
-                        backgroundColor: "white",
-                        border: "solid 1px black",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "36px",
-                    }}
-                    onClick={() => {
-                        uncheckAll();
-                    }}
-                >
-                    <CheckIcon size="20px" stroke="black"></CheckIcon>
-                </button>
             </div>
             <div
                 className="container"
@@ -267,15 +72,16 @@ const PersonPage = () => {
                     {/* ITEM ROW ---------------------------------- */}
                     {people.map((item) => (
                         <ItemRow
-                            toggleDetails={() => {}}
-                            checkBox={() => {}}
-                            closeDelete={() => {}}
-                            delete={() => {}}
-                            openDelete={() => {}}
-                            openEdit={() => {}}
-                            selected={false}
+                            key={item.id}
+                            deleteCallback={() => {}}
+                            updateCallback={async () => {
+                                await PersonService.put(
+                                    getPersonEditModel(item.id!).model,
+                                );
+                                refresh();
+                            }}
+                            item={item}
                             editForm={<PersonEdit id={item.id!}></PersonEdit>}
-                            id={item.id!}
                             details={
                                 <PersonDetails item={item}></PersonDetails>
                             }

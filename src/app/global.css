@@ -243,16 +243,12 @@ h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: solid 1px black;
+    background: black;
     border-radius: 7px;
     height: 15px;
     width: 15px;
-    padding: 5px;
+    padding: 2px;
 }
-.checkbox > svg {
-    rotate: 45deg;
-}
-
 .property {
     display: flex;
     flex-wrap: wrap;

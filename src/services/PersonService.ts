@@ -1,6 +1,6 @@
 import { api } from "./axios";
 import { PersonModel } from "@/prisma/models";
-const PersonFetch = {
+const PersonService = {
     getAll: async () => {
         return api
             .get("/Person")
@@ -42,12 +42,12 @@ const PersonFetch = {
     delete: async (ids: string[]) => {
         Promise.all(ids.map((id) => api.delete(`Person/${id}`)));
     },
-    put: async (data: PersonModel) => {
-        await api.put("Person", JSON.stringify(data), {
+    put: async (data: Partial<PersonModel>) => {
+        await api.put(`Person/${data.id}`, data, {
             headers: {
                 "Content-Type": "application/json",
             },
         });
     },
 };
-export default PersonFetch;
+export default PersonService;

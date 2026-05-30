@@ -1,4 +1,8 @@
+import { getPersonEditModel } from "@/store/personModel";
+
 const PersonEdit = (props: { id: string }) => {
+    const model = getPersonEditModel(props.id).useModel();
+
     return (
         <div style={{ display: "contents" }}>
             <div
@@ -10,8 +14,11 @@ const PersonEdit = (props: { id: string }) => {
                 <p className="cell title-label input-label">Name</p>
                 <input
                     type="text"
-                    id={"e-name" + props.id}
                     style={{ width: "100%" }}
+                    value={model.name}
+                    onChange={(e) => {
+                        model.name = e.target.value;
+                    }}
                 />
             </div>
             <div
@@ -23,8 +30,9 @@ const PersonEdit = (props: { id: string }) => {
                 <p className="cell title-label input-label">Age</p>
                 <input
                     type="number"
-                    id={"e-age" + props.id}
                     style={{ width: "100%" }}
+                    value={model.age}
+                    onChange={(e) => (model.age = parseInt(e.target.value))}
                 />
             </div>
             <div
@@ -36,8 +44,9 @@ const PersonEdit = (props: { id: string }) => {
                 <p className="cell title-label input-label">Phone</p>
                 <input
                     type="number"
-                    id={"e-phone" + props.id}
                     style={{ width: "100%" }}
+                    value={model.phone ?? ""}
+                    onChange={(e) => (model.name = e.target.value)}
                 />
             </div>
             <div
@@ -49,8 +58,9 @@ const PersonEdit = (props: { id: string }) => {
                 <p className="cell title-label input-label">Email</p>
                 <input
                     type="text"
-                    id={"e-email" + props.id}
                     style={{ width: "100%" }}
+                    value={model.email ?? ""}
+                    onChange={(e) => (model.email = e.target.value)}
                 />
             </div>
         </div>

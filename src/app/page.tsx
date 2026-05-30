@@ -1,7 +1,7 @@
 "use client";
 import "./global.css";
 import { useEffect, useRef, useState } from "react";
-import PersonFetch from "@/services/PersonService";
+import PersonService from "@/services/PersonService";
 import TransactionFetch from "../services/TransactionService";
 import Link from "next/link";
 
@@ -16,7 +16,7 @@ const Home = () => {
     const visibleContainerHeight = useState<number | null>(null);
 
     useEffect(() => {
-        PersonFetch.getAll().then((data) => {
+        PersonService.getAll().then((data) => {
             setPeople(data.people.length);
             setBalances([
                 data.totalBalance,

@@ -1,8 +1,8 @@
 import { RefObject, useEffect, useRef, useState } from "react";
+import { useItemRowContext } from "./ItemRowContext";
 
 const EditModel = (props: {
     show: boolean;
-    save: () => void;
     children: React.ReactNode;
     closeEdit: () => void;
     rowRef: RefObject<HTMLDivElement | null>;
@@ -18,6 +18,9 @@ const EditModel = (props: {
             ),
         );
     }, [props.show]);
+
+    const { updateCallback } = useItemRowContext()!;
+
     return (
         <div
             ref={container}
@@ -57,55 +60,16 @@ const EditModel = (props: {
                     }}
                 >
                     <button
-                        onClick={(e) => {
+                        onClick={() => {
                             props.closeEdit();
                         }}
                     >
                         Cancel
                     </button>
                     <button
-                        onClick={(e) => {
-                            props.save();
-                            // var age =
-                            //     document.querySelector(
-                            //         "#e-age" + props.id,
-                            //     ).value;
-                            // var name =
-                            //     document.querySelector(
-                            //         "#e-name" + props.id,
-                            //     ).value;
-                            // var email =
-                            //     document.querySelector(
-                            //         "#e-email" +
-                            //             props.id,
-                            //     ).value;
-                            // var phone =
-                            //     document.querySelector(
-                            //         "#e-phone" +
-                            //             props.id,
-                            //     ).value;
-                            // PersonFetch.put({
-                            //     id: props.id,
-                            //     age:
-                            //         age === ""
-                            //             ? null
-                            //             : parseInt(age),
-                            //     name:
-                            //         name === ""
-                            //             ? null
-                            //             : name,
-                            //     email:
-                            //         email === ""
-                            //             ? null
-                            //             : email,
-                            //     phone:
-                            //         phone === ""
-                            //             ? null
-                            //             : phone,
-                            // }).then((data) => {
-                            //     this.closeEdit(props.id);
-                            //     this.refresh();
-                            // });
+                        onClick={() => {
+                            updateCallback();
+                            props.closeEdit();
                         }}
                     >
                         Done
