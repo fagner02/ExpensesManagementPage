@@ -22,9 +22,13 @@ const PeoplePage = () => {
         })[]
     >([{ id: " - ", name: " - " }]);
 
+    const [loading, setLoading] = useState(true);
+
     const refresh = () => {
+        setLoading(true);
         PersonService.getAll().then((res) => {
             setPeople(res);
+            setLoading(false);
         });
     };
 
@@ -61,7 +65,7 @@ const PeoplePage = () => {
                     </button>
                 </div>
             </div>
-            <ItemList show={showAdd}>
+            <ItemList loading={loading} show={showAdd}>
                 {/* ITEM ROW ---------------------------------- */}
                 {people.map((item) => (
                     <ItemRow

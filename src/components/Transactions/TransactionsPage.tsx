@@ -21,10 +21,13 @@ const TransactionsPage = () => {
         Partial<TransactionModel>[]
     >([{ id: " - ", description: " - " }]);
     const [showAdd, setShowAdd] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const refresh = () => {
+        setLoading(true);
         TransactionService.getAll().then((res) => {
             setTransactions(res);
+            setLoading(false);
         });
     };
 
@@ -62,7 +65,7 @@ const TransactionsPage = () => {
                 </div>
             </div>
 
-            <ItemList show={showAdd}>
+            <ItemList loading={loading} show={showAdd}>
                 {/* ITEM ROW ---------------------------------- */}
                 {transactions.map((item) => (
                     <ItemRow

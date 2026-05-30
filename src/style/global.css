@@ -272,3 +272,47 @@ p {
 h6 {
     font-size: 0.9rem;
 }
+
+.loader {
+    height: 0px;
+    opacity: 0;
+    content-visibility: hidden;
+    width: 100%;
+    background: hsl(0, 0%, 50%);
+    border-radius: 10px;
+    position: absolute;
+    overflow: hidden;
+    transform: translateY(-200%);
+}
+
+.loader-on {
+    height: 10px;
+    opacity: 1;
+    content-visibility: visible;
+    transition: 0.5s all;
+}
+.loader > div {
+    height: 10px;
+    width: 50%;
+    background: hsl(0, 0%, 10%);
+    animation: loader 2s linear alternate infinite;
+    position: relative;
+}
+
+@keyframes loader {
+    0% {
+        width: 0%;
+        right: 0%;
+        transform: translateX(0%);
+    }
+    50% {
+        width: 50%;
+        right: -50%;
+        transform: translateX(-50%);
+    }
+    100% {
+        width: 0%;
+        right: -100%;
+        transform: translateX(-100%);
+    }
+}

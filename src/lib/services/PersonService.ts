@@ -5,17 +5,15 @@ const PersonService = {
         return await api
             .get("/Person")
             .then(async (response) => {
-                let temp = [];
-                temp = response.data;
+                let temp = response.data;
                 if (temp.length === 0) {
-                    temp = [{ id: "  -  ", name: " - " }];
+                    temp = [];
                     return temp;
                 }
                 return temp;
             })
-            .catch((error) => {
-                var temp = [{ id: "  -  ", name: " - " }];
-                return temp;
+            .catch(() => {
+                return [];
             });
     },
     getById: async (id: string) => {
@@ -26,7 +24,7 @@ const PersonService = {
                 temp = await response.data;
                 return temp;
             })
-            .catch((error) => {
+            .catch(() => {
                 return null;
             });
         return result;

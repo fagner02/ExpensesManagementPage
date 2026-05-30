@@ -5,31 +5,14 @@ const TransactionService = {
         return await api
             .get("Transaction")
             .then(async (response) => {
-                let temp = [];
-                temp = await response.data;
+                let temp = await response.data;
                 if (temp.length === 0) {
-                    return [
-                        {
-                            id: "  -  ",
-                            transactionType: " - ",
-                            value: " - ",
-                            personId: " - ",
-                            description: " - ",
-                        },
-                    ];
+                    return [];
                 }
                 return temp;
             })
-            .catch((error) => {
-                return [
-                    {
-                        id: "  -  ",
-                        type: " - ",
-                        value: " - ",
-                        personId: " - ",
-                        description: " - ",
-                    },
-                ];
+            .catch(() => {
+                return [];
             });
     },
     getDetail: async (id: string) => {

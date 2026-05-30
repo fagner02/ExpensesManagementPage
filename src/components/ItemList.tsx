@@ -1,6 +1,11 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
+import Loader from "./Loader";
 
-const ItemList = (props: { children: ReactNode; show: boolean }) => {
+const ItemList = (props: {
+    children: ReactNode;
+    show: boolean;
+    loading: boolean;
+}) => {
     const [height, setHeight] = useState(0);
     const container = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -16,8 +21,10 @@ const ItemList = (props: { children: ReactNode; show: boolean }) => {
                 opacity: props.show ? "0" : "1",
                 visibility: props.show ? "hidden" : "visible",
                 transition: "all 0.5s ease-out",
+                paddingTop: props.loading ? "20px" : "0",
             }}
         >
+            <Loader loading={props.loading}></Loader>
             {/* ITEM ROW ---------------------------------- */}
             {props.children}
         </div>
