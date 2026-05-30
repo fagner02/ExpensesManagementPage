@@ -66,14 +66,17 @@ const PeoplePage = () => {
                     height: showAdd ? "0" : "100%",
                     transform: showAdd ? "translateY(10%)" : "translateY(0)",
                     opacity: showAdd ? "0" : "1",
-                    transition: "all 0.3s ease-out",
+                    transition: "all 0.5s ease-out",
                 }}
             >
                 {/* ITEM ROW ---------------------------------- */}
                 {people.map((item) => (
                     <ItemRow
                         key={item.id}
-                        deleteCallback={() => {}}
+                        deleteCallback={async () => {
+                            await PersonService.delete(item.id!);
+                            refresh();
+                        }}
                         updateCallback={async () => {
                             await PersonService.put(
                                 getPersonEditModel(item.id!).model,
@@ -92,8 +95,9 @@ const PeoplePage = () => {
             {/* ADD ITEM CONTAINER ------------------------------------- */}
             <AddDialog
                 show={showAdd}
-                save={() => {
-                    PersonService.post(personModel);
+                save={async () => {
+                    await PersonService.post(personModel);
+                    refresh();
                 }}
                 closeAdd={() => {
                     setShowAdd(false);

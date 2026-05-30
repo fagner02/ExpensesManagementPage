@@ -1,6 +1,6 @@
 import { TransactionModel } from "@/prisma/models";
 import { api } from "./axios";
-const TransactionFetch = {
+const TransactionService = {
     getAll: async () => {
         return await api
             .get("Transaction")
@@ -40,7 +40,7 @@ const TransactionFetch = {
                 temp = await response.data();
                 return temp;
             })
-            .catch((error) => {
+            .catch(() => {
                 return [];
             });
     },
@@ -52,16 +52,27 @@ const TransactionFetch = {
                 temp = await response.data();
                 return temp;
             })
-            .catch((error) => {
+            .catch(() => {
                 return { count: 0 };
             });
     },
-    post: (data: Partial<TransactionModel>) => {
-        return api.post("Transaction", JSON.stringify(data), {
+    delete: async (id: string) => {
+        return await api.delete(`Transaction/${id}`);
+    },
+    post: async (data: Partial<TransactionModel>) => {
+        console.log(data);
+        return await api.post("Transaction", data, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    },
+    put: async (data: Partial<TransactionModel>) => {
+        return await api.post("Transaction", data, {
             headers: {
                 "Content-Type": "application/json",
             },
         });
     },
 };
-export default TransactionFetch;
+export default TransactionService;

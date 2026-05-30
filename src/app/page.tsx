@@ -2,7 +2,7 @@
 import "@/style/global.css";
 import { useEffect, useRef, useState } from "react";
 import PersonService from "@/lib/services/PersonService";
-import TransactionFetch from "../lib/services/TransactionService";
+import TransactionService from "../lib/services/TransactionService";
 import Link from "next/link";
 
 const Home = () => {
@@ -24,7 +24,7 @@ const Home = () => {
                 data.totalExpenses,
             ]);
         });
-        TransactionFetch.getCount().then((data) => {
+        TransactionService.getCount().then((data) => {
             setTransactions(data.count);
         });
         visibleContainerHeight[1](visibleContainer.current?.scrollHeight ?? 0);

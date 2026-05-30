@@ -2,7 +2,7 @@ import { api } from "./axios";
 import { PersonModel } from "@/prisma/models";
 const PersonService = {
     getAll: async () => {
-        return api
+        return await api
             .get("/Person")
             .then(async (response) => {
                 let temp = [];
@@ -31,15 +31,15 @@ const PersonService = {
             });
         return result;
     },
-    post: (data: Partial<PersonModel>) => {
-        return api.post("Person", data, {
+    post: async (data: Partial<PersonModel>) => {
+        return await api.post("Person", data, {
             headers: {
                 "Content-Type": "application/json",
             },
         });
     },
-    delete: async (ids: string[]) => {
-        Promise.all(ids.map((id) => api.delete(`Person/${id}`)));
+    delete: async (id: string) => {
+        await api.delete(`Person/${id}`);
     },
     put: async (data: Partial<PersonModel>) => {
         await api.put(`Person/${data.id}`, data, {
